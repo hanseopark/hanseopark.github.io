@@ -1,6 +1,9 @@
 ---
 layout: default
 title: Home
+
+namespace: root
+permalink: /
 ---
 
 <div class="posts">
@@ -11,9 +14,7 @@ title: Home
         {{ post.title }}
       </a>
     </h1>
-
     <span class="post-date">{{ post.date | date_to_string }}</span>
-
     {{ post.content }}
   </div>
   {% endfor %}
@@ -35,3 +36,19 @@ title: Home
     <span class="pagination-item newer">Newer</span>
   {% endif %}
 </div>
+
+<!-- Pagination links -->
+<div class="pagination">
+	{% if paginator.previous_page %}
+		<a href="{{ paginator.previous_page_path }}" class="previous">Previous</a>
+	{% else %}
+		<span class="previous">Previous</span>
+	{% endif %}
+	<span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
+	{% if paginator.next_page %}
+		<a href="{{ paginator.next_page_path }}" class="next">Next</a>
+	{% else %}
+		<span class="next ">Next</span>
+	{% endif %}
+</div>
+

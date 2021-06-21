@@ -11,12 +11,43 @@
          content to avoid any CSS collisions with our real content. -->
     <div class="wrap">
       <div class="masthead">
+
+
         <div class="container">
+
           <h3 class="masthead-title">
             <a href="{{ site.baseurl }}/" title="Home">{{ site.title }}</a>
+
             <small>{{ site.tagline }}</small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					{% capture link1 %}{{ site.baseurl_root }}{{ page.url}}{% endcapture %}
+					{% capture link2 %}{{ site.baseurl_root }}/ko{{ page.url}}{% endcapture %}
+					{% capture link3 %}{{ site.baseurl_root }}/jp{{ page.url}}{% endcapture %}
+					{% if site.lang == "en" %}
+					<li class="masthead_menu-item lang">
+						<a href="{{ link1 }}">{% t global.english%} </a>|<a href="{{ link2 }}" class="enabled"> {% t global.korean%}</a> </a>|<a href="{{ link3 }}" class="enabled"> {% t global.japanese%}</a>
+					</li>
+					{% elsif site.lang == "ko" %}
+					<li class="masthead_menu-item visible-links">
+						<a href="{{ link1 }}" class="enabled">{% t global.english%} </a>|<a href="{{ link2 }}"> {% t global.korean%}</a> </a>|<a href="{{ link3 }}" class="enabled"> {% t global.japanese%}</a>
+					</li>
+					{% elsif site.lang == "jp" %}
+					<li class="masthead_menu-item visible-links">
+						<a href="{{ link1 }}" class="enabled">{% t global.english%} </a>|<a href="{{ link2 }}" class="enabled"> {% t global.korean%}</a> </a>|<a href="{{ link3 }}"> {% t global.japanese%}</a>
+					</li>
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+
+
+			
           </h3>
-        </div>
+
+		<div>
+
       </div>
 
       <div class="container content">
@@ -27,5 +58,7 @@
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
     <script src='{{ site.baseurl }}/public/js/script.js'></script>
+
   </body>
+
 </html>

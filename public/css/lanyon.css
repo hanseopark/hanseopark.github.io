@@ -114,6 +114,15 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0;
 }
 
+.head-right {
+    float: right;
+  /*padding-top:    1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #eee; */
+
+}
+
 @media (max-width: 48em) {
   .masthead-title {
     text-align: center;

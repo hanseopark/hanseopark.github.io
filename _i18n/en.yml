@@ -1,0 +1,10 @@
+global:
+  english: En
+  korean: Ko
+  japanese: Jp
+  about: About
+pages:
+  home: Home
+  work: Work
+titles:
+  pagination: Pagination

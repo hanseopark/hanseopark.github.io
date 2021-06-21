@@ -1,29 +1,27 @@
 ---
 layout: page
 title: About
+permalink: /about/
 ---
 
-<p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
-</p>
+{% if site.lang == 'en' %}
 
-In the novel, *The Strange Case of Dr. Jeykll and Mr. Hyde*, Mr. Poole is Dr. Jekyll's virtuous and loyal butler. Similarly, Poole is an upstanding and effective butler that helps you build Jekyll themes. It's made by [@mdo](https://twitter.com/mdo).
+This is Hanseo Park.
 
-There are currently two themes built on Poole:
+I'm stydying High energy particle (HEP) at university of Tsukuba for M.S.
 
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
+I see the job related by data scientist and want to find the dream's model for society.
 
-Learn more and contribute on [GitHub](https://github.com/poole).
+If you have interested. please contat me :)
 
-## Setup
+{% elsif site.lang == 'ko' %}
 
-Some fun facts about the setup of this project include:
+데이터 사이언티스트를 꿈꾸는 HAN 입니다!
 
-* Built for [Jekyll](https://jekyllrb.com)
-* Developed on GitHub and hosted for free on [GitHub Pages](https://pages.github.com)
-* Coded with [Atom](https://atom.io)
+{% else %}
 
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/poole/issues/new) or [ask me on Twitter](https://twitter.com/mdo).
+データサイエンティストを目指すHANです！
 
-Thanks for reading!
+{% endif %}
+
+
