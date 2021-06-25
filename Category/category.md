@@ -5,3 +5,5 @@ permalink: /Category/
 ---
 
 Category test
+Category test
+Category test
