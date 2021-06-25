@@ -1,0 +1,98 @@
+---
+layout: post
+title: Introducing Lanyon
+permalink: /2020-04-01-en/
+---
+
+2. **문법**
+
+   2.1 헤더(Header), 문석의 제목
+
+   ### 헤더
+
+   ## 헤더
+
+
+   > \#\#\# 헤더
+   >
+   > \#\# 헤더
+
+
+
+3. **리스트**
+
+   3.1 orded list
+
+   > 1. 2. white space
+
+   3.2 unordered list
+
+   > *, -, + white space
+   
+   3.3 split list
+   
+   ```
+   - list one - item 1
+   - list one - item 2
+      - sub item 1
+      - sub item 2
+   - list one - item 3
+   ^
+   - list two - item A
+   - list two - item B
+   ^
+   - list three - item _i_
+   - list three - item _ii_
+   ```
+
+
+4. **링크**
+
+   4.1 url with hyperlink
+
+   [Google](https://google.com)
+
+   [GIthub](https:github.com/hanseopark)
+
+   > ​	\[Google\]\(https&#58;//google.com)
+   >
+   > ​	\[Github\](https&#58;github.com/hanseopark)
+   >
+   > ​	(\&#58; = : 를 이용해서 하이퍼링크 회피)
+
+
+
+5. 코드블럭(code blocks)
+
+   > ```{.python}
+   > def sum (a,b)
+   > 	return a+b
+   > ```
+
+   
+
+   > \``` \{.python\}
+   >
+   > def sum(a,b):
+   >
+   > return a+b
+   >
+   > \```
+
+   - Examaple language
+
+   > - no-highlight	
+   >
+   > - Bash (bash)
+   >
+   > - c++ (cpp)
+   >
+   > - JSON (json)
+   >
+   > - Python (python)
+   >
+   >   ...
+
+6. 이미지(image)
+
+   > ![image name](url)
