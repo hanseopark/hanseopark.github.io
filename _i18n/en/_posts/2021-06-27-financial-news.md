@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Download financial news of yahoo with python 
+comments: true
 permalink: /2021-06-27-financial-news/
 ---
 
