@@ -37,6 +37,7 @@ paginate: 5
 plugins:
   - jekyll-feed
   - jekyll-paginate
+  - jekyll-sitemap
 
   #- jekyll-polyglot
 
