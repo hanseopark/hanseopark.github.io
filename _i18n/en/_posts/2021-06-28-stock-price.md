@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: How to get stock's price? 
 permalink: /2021-06-28-stock-price/
 ---
