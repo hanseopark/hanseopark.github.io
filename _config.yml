@@ -43,7 +43,7 @@ plugins:
 
 # Language
 languages: ["en", "ko", "jp"]
-exclude_from_localizations: ["javascript", "images", "css"]
+exclude_from_localizations: ["javascript", "images", "css", "favicon.ico"]
 # default_locale_in_subfolder: true
 
 # default_lang: "en"
