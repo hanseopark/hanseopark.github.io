@@ -2,13 +2,13 @@
 <sitemapindex
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<sitemap>
-		<loc>https://www.example.com/sitemap.xml</loc>
+		<loc>https://hanseopark.github.io/sitemap.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>https://www.example.com/ko/sitemap.xml</loc>
+		<loc>https://hanseopark.github.io/ko/sitemap.xml</loc>
 	</sitemap>
 	<sitemap>
-		<loc>https://www.example.com/jp/sitemap.xml</loc>
+		<loc>https://hanseopark.github.io/jp/sitemap.xml</loc>
 	</sitemap>
 </sitemapindex>
 
