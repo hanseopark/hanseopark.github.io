@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: How to get stock's financial statements? 
+title: 株式の財務諸表を得る方法は?
 permalink: /2021-07-06-financial-statements/
 ---
 
