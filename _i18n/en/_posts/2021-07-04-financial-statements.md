@@ -26,7 +26,7 @@ I use this both API in condition.
 > ```python
 > 
 > def main(stock_list):
->     # For check table and others of the ticker like aapl
+>     # For check the table of one ticker like aapl
 >     aapl_quote = yfs.get_quote_table('aapl')
 >     aapl_val = yfs.get_stats_valuation('aapl')
 >     aapl_ext = yfs.get_stats('aapl')
@@ -46,6 +46,7 @@ I use this both API in condition.
 >     print('*'*100)
 >     print('balance sheets')
 >     print(aapl_sheet)
+>     print(len(aapl_sheet.columns))
 >     print('*'*100)
 >     print('income statements')
 >     print(aapl_income)
@@ -78,7 +79,7 @@ I use this both API in condition.
 > 
 >     print(dow_list)
 > 
->     # Get data in the current column for each stock's valuation table
+>     # Get data in the current  olumn for each stock's valuation table
 >     dow_stats = {}
 >     dow_addstats = {}
 >     dow_balsheets = {}
@@ -113,20 +114,24 @@ I use this both API in condition.
 > 
 >         except:
 >             error_symbols.append(ticker)
+>             print('Error ticker: ', ticker)
 > 
 >     print('error symol: ', error_symbols)
 > 
->     recent_sheets = {ticker : sheet.iloc[:,:4] for ticker, sheet in dow_balsheets.items()}
->     for ticker in recent_sheets.keys():
->         recent_sheets[ticker].columns = ["Recent", "Before_1", "Before_2", "Before_3"]
+>     for ticker in dow_balsheets.keys():
+>         leng = len(dow_balsheets[ticker].columns)
+>         dow_balsheets[ticker].columns = ['Before_'+str(i) for i in range(0,leng)]
+>         dow_balsheets[ticker] = dow_balsheets[ticker].rename(columns={'Before_0': 'Recent'})
 > 
->     recent_income_statements = {ticker : sheet.iloc[:,:4] for ticker,sheet in dow_income.items()}
->     for ticker in recent_income_statements.keys():
->         recent_income_statements[ticker].columns = ["Recent", "Before_1", "Before_2", "Before_3"]
+>     for ticker in dow_income.keys():
+>         leng = len(dow_income[ticker].columns)
+>         dow_income[ticker].columns = ['Before_'+str(i) for i in range(0,leng)]
+>         dow_income[ticker] = dow_income[ticker].rename(columns={'Before_0': 'Recent'})
 > 
->     recent_cash_flows = {ticker : flow.iloc[:,:4] for ticker,flow in dow_flow.items()}
->     for ticker in recent_cash_flows.keys():
->         recent_cash_flows[ticker].columns = ["Recent", "Before_1", "Before_2", "Before_3"]
+>     for ticker in dow_flow.keys():
+>         leng = len(dow_flow[ticker].columns)
+>         dow_flow[ticker].columns = ['Before_'+str(i) for i in range(0,leng)]
+>         dow_flow[ticker] = dow_flow[ticker].rename(columns={'Before_0': 'Recent'})
 > 
 > 
 >     combined_stats = pd.concat(dow_stats)
@@ -135,23 +140,17 @@ I use this both API in condition.
 >     combined_addstats = pd.concat(dow_addstats)
 >     combined_addstats = combined_addstats.reset_index()
 > 
->     combined_balsheets = pd.concat(recent_sheets)
+>     combined_balsheets = pd.concat(dow_balsheets)
 >     combined_balsheets = combined_balsheets.reset_index()
 > 
->     combined_income = pd.concat(recent_income_statements)
+>     combined_income = pd.concat(dow_income)
 >     combined_income = combined_income.reset_index()
 > 
->     combined_flow = pd.concat(recent_cash_flows)
+>     combined_flow = pd.concat(dow_flow)
 >     combined_flow = combined_flow.reset_index()
 > 
 >     del combined_stats['level_1']
 >     del combined_addstats['level_1']
-> 
->     combined_stats.columns = ['Ticker', 'Attribute', 'Recent']
->     combined_addstats.columns = ['Ticker', 'Attribute', 'Value']
->     combined_balsheets.columns = ['Ticker', 'Breakdown', 'Recent', 'Before_1', "Before_2", "Before_3"]
->     combined_income.columns = ["Ticker", "Breakdown", "Recent", "Before_1", "Before_2", "Before_3"]
->     combined_flow.columns = ["Ticker", "Breakdown", "Recent", "Before_1", "Before_2", "Before_3"]
 > 
 >     print(combined_stats)
 >     print(combined_addstats)
@@ -178,6 +177,7 @@ I use this both API in condition.
 > if __name__ == '__main__':
 >     s= input("Choice of stock's list (dow, sp500, nasdaq, other, selected): ")
 >     main(stock_list=s)
+> 
 > 
 > ```
 >

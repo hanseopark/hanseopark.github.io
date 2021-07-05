@@ -1,3 +1,3 @@
-User-agent: hanseopark
+User-agent: *
 Sitemap: https://hanseopark.github.io/sitemap_index.xml
 
