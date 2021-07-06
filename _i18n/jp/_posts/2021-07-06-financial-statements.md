@@ -7,7 +7,7 @@ permalink: /2021-07-06-financial-statements/
 
 ### Stock's financial statements
 
-株式は現在幾らかの価額も重要がこれよりも**財務諸表**(Financial statements)を知ることがより重要です。簡単に考えても株式を現在買う価額は意味なく時価総額が重要です。これは財務諸表の一種でこれ以外にも現在現金の流れななど、会社を評価する要素を多くあります。
+株式は現在幾らかの価格も重要がこれよりも**財務諸表**(Financial statements)を知ることがより重要です。簡単に考えても株式を現在買う価格は意味なく時価総額が重要です。これは財務諸表の一種でこれ以外にも現在現金の流れななど、会社を評価する要素を多くあります。
 
 代表的にPERまたはROAなどがあり、私は財務諸表を[yahoo finance site](https://finance.yahoo.com) 上を基盤として[yahoo_fin API](https://pypi.org/project/yahoo-fin/) をつかて測定してみます。具体的な使い方は[yahoo_fin documation](http://theautomatic.net/yahoo_fin-documentation/)を参考してください。
 

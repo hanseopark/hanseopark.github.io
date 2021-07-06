@@ -1,13 +1,13 @@
 ---
 layout: post
 comments: true
-title: 株式の価額を得る方法は?
+title: アメリカの単元株価格を得る方法は?
 permalink: /2021-07-06-stock-price/
 ---
 
 ### Stock's price
 
-このページはパイソン（Python）APIを用いてアメリカの株式の価額をを得る方法について紹介します。
+このページはパイソン（Python）APIを用いてアメリカの単元株価格をを得る方法について紹介します。
 
 私が使うAPIに関しては多く2つあります。
 
@@ -109,7 +109,7 @@ permalink: /2021-07-06-stock-price/
 
 願うIndexに関してyahoo_fin APIを用いてTickerをリストとして呼びます。
 
-各Tickerに関して指定する日から今日までの株式の価額を測定します。さらに、現在の値段も別のデータフレイムとしてセーブします。NasdaqとotherのIndexは結構時間掛かるのでご注意ください。
+各Tickerに関して指定する日から今日までの単元株価格を測定します。さらに、現在の値段も別のデータフレイムとしてセーブします。NasdaqとotherのIndexは結構時間掛かるのでご注意ください。
 
 
 
