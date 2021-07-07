@@ -9,7 +9,7 @@ permalink: /2021-07-07-financial-statements/
 
 주식은 현재 얼마의 가젹으로 살수 있는지는 사실 중요하지 않습니다. 현재가와 발행한 주식수 을 포함한 시가총액(Market Capitalization)이 중요합니다. 이외로 PER, ROA 그리고 현금 흐름등 다양한 주가 정보가 있습니다. 이러한 주식의 정보를 모아서 회사는 재무재표를 발행하고, 감사하게도 야후 파이넨셜을 포함한  주식 정보 사이트에 올려져있습니다. 
 
-나는 [yahoo_fin API](https://pypi.org/project/yahoo-fin/) 를 이용해서 간단히 웹상의 재무재표를 얻을 것입니다. 구체적인 사용법은 해당 [Documation](http://theautomatic.net/yahoo_fin-documentation/)를 참고해주세요.
+저는 [yahoo_fin API](https://pypi.org/project/yahoo-fin/) 를 이용해서 간단히 웹상의 재무재표를 얻을 것입니다. 구체적인 사용법은 해당 [Documation](http://theautomatic.net/yahoo_fin-documentation/)를 참고해주세요.
 
 - **yahoo_fin API**
 
