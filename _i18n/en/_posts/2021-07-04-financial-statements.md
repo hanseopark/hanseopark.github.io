@@ -9,7 +9,7 @@ permalink: /2021-07-04-financial-statements/
 
 It is important for stock to get the price as well as financial statements
 
-This is presented typically PER and ROA etc. The other's factor like income statement and cash flow based on [yahoo finance site](https://finance.yahoo.com) using [yahoo_fin API](https://pypi.org/project/yahoo-fin/) with python and refer to [yaho_fin documation](http://theautomatic.net/yahoo_fin-documentation/).
+This is presented typically PER and ROA etc. The other's factor like income statement and cash flow based on [yahoo finance site](https://finance.yahoo.com) using [yahoo_fin API](https://pypi.org/project/yahoo-fin/) with python and refer to [yahoo_fin documation](http://theautomatic.net/yahoo_fin-documentation/).
 
 - **yahoo_fin API**
 
