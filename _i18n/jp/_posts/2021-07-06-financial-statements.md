@@ -20,8 +20,17 @@ permalink: /2021-07-06-financial-statements/
 ### Code to get stock's financial statements
 
 > ```python
+> import yahoo_fin.stock_info as yfs
+> import pandas as pd
 > 
-> def main(stock_list):
+> from tqdm import tqdm
+> import json
+> 
+> def main(url, index_list, index_name):
+> 
+>     ## Configuration directory url
+>     url_data = url+'data_origin/'
+> 
 >     # For check the table of one ticker like aapl
 >     aapl_quote = yfs.get_quote_table('aapl')
 >     aapl_val = yfs.get_stats_valuation('aapl')
@@ -51,30 +60,6 @@ permalink: /2021-07-06-financial-statements/
 >     print(aapl_flow)
 >     print('*'*100)
 > 
->     # Get list of Dow tickers
->     dow_list = yfs.tickers_dow()
->     filename = ''
->     if stock_list == 'dow':
->         dow_list = yfs.tickers_dow()
->         filename = 'dow'
->     elif stock_list == 'sp500':
->         filename = 'sp500'
->         dow_list = yfs.tickers_sp500()
->     elif stock_list == 'nasdaq':
->         filename = 'nasdaq'
->         dow_list = yfs.tickers_nasdaq()
->     elif stock_list == 'other':
->         filename = 'other'
->         dow_list = yfs.tickers_other()
->     elif stock_list == 'selected':
->         filename = 'selected'
->         url = '/Users/hanseopark/Work/stock/data_ForTrading/selected_ticker.json'
->         temp_pd = pd.read_json(url)
->         temp_pd = temp_pd['Ticker']
->         dow_list = temp_pd.values.tolist()
-> 
->     print(dow_list)
-> 
 >     # Get data in the current  olumn for each stock's valuation table
 >     dow_stats = {}
 >     dow_addstats = {}
@@ -83,7 +68,7 @@ permalink: /2021-07-06-financial-statements/
 >     dow_flow = {}
 > 
 >     error_symbols = []
->     for ticker in tqdm(dow_list):
+>     for ticker in tqdm(index_list):
 >         try:
 >             # Getteing Summary
 >             basic = yfs.get_stats_valuation(ticker)
@@ -132,18 +117,23 @@ permalink: /2021-07-06-financial-statements/
 > 
 >     combined_stats = pd.concat(dow_stats)
 >     combined_stats = combined_stats.reset_index()
+>     combined_stats = combined_stats.rename(columns={'level_0': 'Ticker'})
 > 
 >     combined_addstats = pd.concat(dow_addstats)
 >     combined_addstats = combined_addstats.reset_index()
+>     combined_addstats = combined_addstats.rename(columns={'level_0': 'Ticker'})
 > 
 >     combined_balsheets = pd.concat(dow_balsheets)
 >     combined_balsheets = combined_balsheets.reset_index()
+>     combined_balsheets = combined_balsheets.rename(columns={'level_0': 'Ticker'})
 > 
 >     combined_income = pd.concat(dow_income)
 >     combined_income = combined_income.reset_index()
+>     combined_income = combined_income.rename(columns={'level_0': 'Ticker'})
 > 
 >     combined_flow = pd.concat(dow_flow)
 >     combined_flow = combined_flow.reset_index()
+>     combined_flow = combined_flow.rename(columns={'level_0': 'Ticker'})
 > 
 >     del combined_stats['level_1']
 >     del combined_addstats['level_1']
@@ -156,7 +146,7 @@ permalink: /2021-07-06-financial-statements/
 > 
 >     list_stats = ['stats', 'addstats', 'balsheets', 'income', 'flow']
 >     for s in list_stats:
->         url = '/Users/hanseopark/Work/stock/data_origin/FS_{0}_{1}'.format(filename, s)
+>         url_FS = url_data+'FS_{0}_{1}'.format(index_name, s)
 >         if s == 'stats':
 >             df = combined_stats
 >         elif s == 'addstats':
@@ -167,14 +157,38 @@ permalink: /2021-07-06-financial-statements/
 >             df = combined_income
 >         elif s == 'flow':
 >             df = combined_flow
->         df.to_json(url+'.json')
->         df.to_csv(url+'.csv')
+>         df.to_json(url_FS+'.json')
+>         df.to_csv(url_FS+'.csv')
 > 
 > if __name__ == '__main__':
->     s= input("Choice of stock's list (dow, sp500, nasdaq, other, selected): ")
->     main(stock_list=s)
+>     with open('../config/config.json', 'r') as f:
+>         config = json.load(f)
+>     root_url = config['root_dir']
 > 
+>     filename = input("Choice of stock's list (dow, sp500, nasdaq, other, selected): ")
 > 
+>     # Get list of Dow tickers
+>     dow_list = yfs.tickers_dow()
+>     if filename == 'dow':
+>         dow_list = yfs.tickers_dow()
+>     elif filename == 'sp500':
+>         dow_list = yfs.tickers_sp500()
+>     elif filename == 'nasdaq':
+>         dow_list = yfs.tickers_nasdaq()
+>     elif filename == 'other':
+>         dow_list = yfs.tickers_other()
+>     elif filename == 'selected':
+>         url = root_url+'/data_ForTrading/selected_ticker.json'
+>         temp_pd = pd.read_json(url)
+>         temp_pd = temp_pd['Ticker']
+>         dow_list = temp_pd.values.tolist()
+> 
+>     print(dow_list)
+> 
+>     main(url=root_url, index_list = dow_list, index_name = filename)
+> 
+> else:
+>     pass
 > ```
 >
 > 
