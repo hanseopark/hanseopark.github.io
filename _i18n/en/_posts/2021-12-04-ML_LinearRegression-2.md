@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: The prediction of stock's price using Linear Regression for Machine Learning (1)
+title: The prediction of stock's price using Linear Regression for Machine Learning (2)
 permalink: /2021-11-28-ML-LinearRegression-2/
 ---
 
