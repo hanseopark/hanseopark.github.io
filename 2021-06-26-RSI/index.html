@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Relative strength index (RSI) &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/2021-06-26-RSI/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item lang">
+						<a href="/2021-06-26-RSI/">En </a>|<a href="/ko/2021-06-26-RSI/" class="enabled"> Ko</a> </a>|<a href="/jp/2021-06-26-RSI/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Relative strength index (RSI)</h1>
+  <span class="post-date">26 Jun 2021</span>
+  <h3 id="relative-strength-index-rsi">Relative Strength index (RSI)</h3>
+
+<p>It’s famouse for secondary indicator of stock’s market. This is presented by <strong>variance</strong> for changing upper and down.</p>
+
+<p>It has tendency if it decrease, it is creasing and  also if it crease, it is decresing.</p>
+
+<p>Recently it should have been not true surely. However, it has been importnat index for advance afterwards.</p>
+
+<h3 id="class-code">Class code</h3>
+
+<p>Anyway, this is presented how to calculate the RSI.</p>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># classRSI.py
+</span> 
+<span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+
+<span class="k">class</span> <span class="nc">Stocks</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">end_day</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">start_day</span> <span class="o">=</span> <span class="n">start_day</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">end_day</span> <span class="o">=</span> <span class="n">end_day</span>
+
+    <span class="k">def</span> <span class="nf">calcRSI</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pdr</span><span class="p">.</span><span class="nc">DataReader</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">symbol</span><span class="p">,</span> <span class="sh">'</span><span class="s">yahoo</span><span class="sh">'</span><span class="p">,</span><span class="n">self</span><span class="p">.</span><span class="n">start_day</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">end_day</span><span class="p">)</span>
+        <span class="n">date_index</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">str</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="nf">diff</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="p">.</span><span class="nf">diff</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">where</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="nf">diff</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">df</span><span class="p">.</span><span class="nf">diff</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">AU</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">date_index</span><span class="p">).</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">period</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+        <span class="n">AD</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">date_index</span><span class="p">).</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">period</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+        <span class="n">RSI</span> <span class="o">=</span> <span class="n">AU</span><span class="o">/</span> <span class="p">(</span><span class="n">AD</span><span class="o">+</span><span class="n">AU</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+        <span class="n">df</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">RSI</span><span class="sh">'</span><span class="p">,</span> <span class="n">RSI</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">RSI signal</span><span class="sh">'</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">RSI</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">df</span>
+
+</code></pre></div>  </div>
+</blockquote>
+
+<p>RSI needs variance of upper and down with average of this. And It is calculated</p>
+
+<p><strong>RSI = Average of Upper / (Average of Upper + Average of Down) * 100</strong></p>
+
+<p>Caculating <strong>RSI signal</strong> which is calculated moving avereage for RSI, it’s comparing with two indexs.</p>
+
+<h3 id="main-code-of-plotting">Main code of plotting</h3>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1"># PlotRSI.py
+</span>  
+ <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+ <span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+ <span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+ <span class="kn">import</span> <span class="n">datetime</span>
+ <span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+ <span class="kn">import</span> <span class="n">matplotlib.ticker</span> <span class="k">as</span> <span class="n">ticker</span>
+
+ <span class="kn">from</span> <span class="n">classRSI</span> <span class="kn">import</span> <span class="n">Stocks</span>
+
+ <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+     <span class="n">td_1y</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">52</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+     <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+     <span class="n">start_day</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">td_1y</span>
+
+     <span class="n">symbol</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">'</span><span class="s">Write ticker name like aapl: </span><span class="sh">'</span><span class="p">)</span> <span class="c1">#^IXIC
+</span>
+     <span class="n">stock</span> <span class="o">=</span> <span class="nc">Stocks</span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">)</span>
+
+     <span class="n">df</span><span class="o">=</span> <span class="n">stock</span><span class="p">.</span><span class="nf">calcRSI</span><span class="p">()</span>
+
+     <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">str</span><span class="sh">'</span><span class="p">)</span>
+
+     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+     <span class="n">ax_main</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+     <span class="k">def</span> <span class="nf">x_date</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">pos</span><span class="p">):</span>
+         <span class="k">try</span><span class="p">:</span>
+             <span class="k">return</span> <span class="n">index</span><span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)][:</span><span class="mi">7</span><span class="p">]</span>
+         <span class="k">except</span> <span class="nb">IndexError</span><span class="p">:</span>
+             <span class="k">return</span> <span class="sh">''</span>
+
+     <span class="c1"># For figure
+</span>     <span class="n">ax_main</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">MaxNLocator</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+     <span class="n">ax_main</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_formatter</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">FuncFormatter</span><span class="p">(</span><span class="n">x_date</span><span class="p">))</span>
+
+     <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">RSI</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">RSI</span><span class="sh">'</span><span class="p">)</span>
+     <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">RSI signal</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">RSI signal</span><span class="sh">'</span><span class="p">)</span>
+
+     <span class="n">plt</span><span class="p">.</span><span class="nf">grid</span><span class="p">()</span>
+     <span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+
+ <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+     <span class="nf">main</span><span class="p">()</span>
+
+</code></pre></div>  </div>
+
+  <p>​</p>
+</blockquote>
+
+<p>It is simply calculating for start day to today and plot</p>
+
+<h3 id="example-figure">Example figure</h3>
+
+<p><img src="images/example_fig_RSI.png" alt="image info" /></p>
+
+<p>Typical ticker is AAPL(Apple). This figure is presented at 2021-06-26.</p>
+
+<p>you just know that this plot what is mean :)</p>
+
+<h3 id="model-selection">Model, Selection</h3>
+
+<p>For using RSI, we can make model and select ticker in index (Dow, S&amp;P500 etc) ?</p>
+
+<p>I have simple idea to use RSI value of down to up and up to down.</p>
+
+<ul>
+  <li><strong>It is true that RSI value is under 30?</strong></li>
+</ul>
+
+<p>In my case, I have choose selected data by Bollinger band’s model. This model is explained <a href="https://hanseopark.github.io//2021-06-25-Bollinger-Band/">this post</a> which is also important finance index.</p>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1"># modelRSI.py
+</span>  
+ <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+ <span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+ <span class="kn">import</span> <span class="n">datetime</span>
+ <span class="kn">from</span> <span class="n">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+ <span class="kn">from</span> <span class="n">classRSI</span> <span class="kn">import</span> <span class="n">Stocks</span>
+
+ <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">stock_list</span><span class="p">,</span> <span class="n">day_init</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="nf">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">today</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()):</span>
+     <span class="nf">print</span><span class="p">(</span><span class="n">stock_list</span><span class="p">)</span>
+
+     <span class="n">selected_ticker</span> <span class="o">=</span> <span class="p">[]</span>
+     <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="nf">tqdm</span><span class="p">(</span><span class="n">stock_list</span><span class="p">):</span>
+         <span class="n">stock</span> <span class="o">=</span> <span class="nc">Stocks</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">)</span>
+         <span class="n">df</span> <span class="o">=</span> <span class="n">stock</span><span class="p">.</span><span class="nf">calcRSI</span><span class="p">()</span>
+         <span class="n">df_recent</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+         <span class="n">value_RSI</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">RSI</span><span class="sh">'</span><span class="p">])</span>
+         <span class="n">value_RSI_signal</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">RSI signal</span><span class="sh">'</span><span class="p">])</span>
+         <span class="n">down</span> <span class="o">=</span> <span class="mi">40</span>
+         <span class="k">if</span> <span class="n">value_RSI</span> <span class="o">&lt;</span> <span class="n">down</span><span class="p">:</span>
+             <span class="k">if</span> <span class="n">value_RSI</span> <span class="o">&lt;</span> <span class="n">value_RSI_signal</span><span class="p">:</span>
+                 <span class="n">selected_ticker</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+     <span class="nf">print</span><span class="p">(</span><span class="n">selected_ticker</span><span class="p">)</span>
+
+     <span class="n">url</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/Users/hanseopark/Work/stock/data_ForTrading/selected_ticker.json</span><span class="sh">'</span>
+     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">selected_ticker</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">])</span>
+     <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+ <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+     <span class="n">td_1y</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">52</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+     <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+     <span class="n">start_day</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">td_1y</span>
+
+     <span class="n">url</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/Users/hanseopark/Work/stock/data_ForTrading/{0}_TickerList.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">today</span><span class="p">.</span><span class="nf">date</span><span class="p">())</span>
+     <span class="n">s_list</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_json</span><span class="p">(</span><span class="n">url</span><span class="p">)[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">].</span><span class="n">values</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+     <span class="nf">main</span><span class="p">(</span><span class="n">stock_list</span> <span class="o">=</span> <span class="n">s_list</span><span class="p">,</span> <span class="n">day_init</span> <span class="o">=</span> <span class="n">start_day</span><span class="p">)</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>If you change var of <strong>down</strong> like 30 to 40, you should get many ticker beyond hard condition.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Let us know what is RSI and how to caclulate with figure. And then we are going to find ticker using this model :)</p>
+
+<p>If you want to use this code, I’m very sorry that you should change code and make directory for data a little bit.</p>
+
+<p>I should appreciate and refer for many blog on google. Thanks a lot.</p>
+
+<p>If you satisfied this post you should check <a href="https://github.com/hanseopark/Stock/tree/master/RelativeStrengthIndex">Github</a> and please <strong>Star</strong> :)</p>
+
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-2/">
+            The prediction of stock's price using Linear Regression for Machine Learning (2)
+            <small>04 Dec 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-1/">
+            The prediction of stock's price using Linear Regression for Machine Learning (1)
+            <small>28 Nov 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-10-pre-finance/">
+            Preprocessing with financial statements
+            <small>10 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+

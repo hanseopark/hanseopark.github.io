@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Preprocessing with financial statements &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/2021-07-10-pre-finance/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item lang">
+						<a href="/2021-07-10-pre-finance/">En </a>|<a href="/ko/2021-07-10-pre-finance/" class="enabled"> Ko</a> </a>|<a href="/jp/2021-07-10-pre-finance/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Preprocessing with financial statements</h1>
+  <span class="post-date">10 Jul 2021</span>
+  <h3 id="preprocessing-with-financial-statements">Preprocessing with financial statements</h3>
+
+<p>I have already gotten the financial statement of <a href="https://hanseopark.github.io/2021-07-04-financial-statements/">post</a>.</p>
+
+<p>It is enough from person to person. However I will analyze for meachine learning for regression.</p>
+
+<p>I hope to get and change numeric data in statements.</p>
+
+<p>If you want to understand what it is mean in financialk statements, you should know and search the defintion for google. It is not major of finance for me and already explained more easily than me for world.</p>
+
+<p>I have used config file for root_url which is setted by myself and get index list using API of <a href="http://theautomatic.net/yahoo_fin-documentation/#get_balance_sheet">yahoo_fin</a>.</p>
+
+<p>And, I utilized <a href="https://github.com/hanseopark/Stock/blob/master/Strategy/class_Strategy.py">class</a> made by me. It is useful to preprocess and multiple strategy that it is updated for performance improvement curruntly.</p>
+
+<ul>
+  <li><strong>yahoo_fin API</strong></li>
+</ul>
+
+<blockquote>
+  <p>pip install yahoo_fin</p>
+</blockquote>
+
+<p>You have to make directory(<root_url>/data_preprocessing) before run below code.</root_url></p>
+
+<h3 id="code-to-get-preprocessing-stocks-financial-statements">Code to get preprocessing stock’s financial statements</h3>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="n">yahoo_fin.stock_info</span> <span class="k">as</span> <span class="n">yfs</span>
+
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sh">''</span><span class="p">,</span> <span class="n">index_list</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">AAPL</span><span class="sh">'</span><span class="p">],</span> <span class="n">index_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span><span class="p">,</span> <span class="n">EACH</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ALL</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">SHOW</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">SAVE</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span>
+
+    <span class="c1">## Configuration directory url
+</span>    <span class="n">url_data</span> <span class="o">=</span> <span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">data_origin/</span><span class="sh">'</span>
+    <span class="n">url_pre</span>  <span class="o">=</span> <span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">data_preprocessing/</span><span class="sh">'</span>
+
+    <span class="n">strategy</span> <span class="o">=</span> <span class="nc">LongTermStrategy</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="c1"># Select Long term strategy
+</span>
+    <span class="c1">###################
+</span>    <span class="c1">## Preprocessing ##
+</span>    <span class="c1">###################
+</span>
+    <span class="k">if</span> <span class="n">EACH</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Preprocessing each Financial Statements</span><span class="sh">'</span><span class="p">)</span>
+        <span class="c1"># Basic stats
+</span>        <span class="n">dict_basic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">basic_fac</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">PER</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PSR</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PBR</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PEG</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">forPER</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Cap</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Each factor preprocessing in Basic stats (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fac</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">PER</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_PER</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">PSR</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_PSR</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">PBR</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_PBR</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">PEG</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_PEG</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">forPER</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_FORPER</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">Cap</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_CAP</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">dict_basic</span><span class="p">[</span><span class="n">fac</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="c1"># Additional stats
+</span>        <span class="n">dict_add</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">basic_fac</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Beta</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">DivRate</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">ROE</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">ROA</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PM</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Cash</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Debt</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Each factor preprocessing in Additional stats (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fac</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">Beta</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_Beta</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">DivRate</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_DivRate</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">ROE</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_ROE</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">ROA</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_ROA</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">PM</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_PM</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">Cash</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_Cash</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">Debt</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_Debt</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">dict_add</span><span class="p">[</span><span class="n">fac</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="c1"># Balance sheets
+</span>        <span class="n">dict_bal</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">basic_fac</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">TA</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Each factor preprocessing in Balance sheets (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fac</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">TA</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_TA</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">dict_bal</span><span class="p">[</span><span class="n">fac</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="c1"># Income sheets
+</span>        <span class="n">dict_income</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">basic_fac</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">TR</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Each factor preprocessing in Income sheets (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fac</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">TR</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_TR</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">dict_income</span><span class="p">[</span><span class="n">fac</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="c1"># Cash flow
+</span>        <span class="n">dict_flow</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">basic_fac</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">DIV</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">ISS</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Each factor preprocessing in Cash flow (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fac</span> <span class="ow">in</span> <span class="n">basic_fac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">DIV</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_DIV</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">fac</span> <span class="o">==</span> <span class="sh">'</span><span class="s">ISS</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_ISS</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">fac</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">dict_flow</span><span class="p">[</span><span class="n">fac</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+    <span class="k">if</span> <span class="n">ALL</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">stats_name</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">stats</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">addstats</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">balsheets</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">income</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">flow</span><span class="sh">'</span><span class="p">]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">Preprocessing element in (</span><span class="sh">'</span><span class="o">+</span> <span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stats_name</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="sh">'</span><span class="s">)</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">stats_name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="o">==</span> <span class="sh">'</span><span class="s">stats</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_stats</span><span class="p">(</span><span class="n">preprocessing</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stat</span> <span class="o">==</span> <span class="sh">'</span><span class="s">addstats</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_addstats</span><span class="p">(</span><span class="n">preprocessing</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stat</span> <span class="o">==</span> <span class="sh">'</span><span class="s">balsheets</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_balsheets_element</span><span class="p">(</span><span class="n">index_list</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stat</span> <span class="o">==</span> <span class="sh">'</span><span class="s">income</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_income_element</span><span class="p">(</span><span class="n">index_list</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stat</span> <span class="o">==</span> <span class="sh">'</span><span class="s">flow</span><span class="sh">'</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">strategy</span><span class="p">.</span><span class="nf">get_flow_element</span><span class="p">(</span><span class="n">index_list</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">SAVE</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="s">----------------------------- SAVE DATA  {} ---------------------------------</span><span class="se">\n</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">stat</span><span class="p">))</span>
+                <span class="nf">print</span><span class="p">(</span><span class="sh">''</span><span class="p">)</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}_element.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">stat</span><span class="p">))</span>
+                <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_pre</span><span class="o">+</span><span class="sh">'</span><span class="s">/{0}_{1}_element.csv</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">stat</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">SHOW</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="n">class_Strategy</span> <span class="kn">import</span> <span class="n">LongTermStrategy</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">config/config.json</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">root_url</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">root_dir</span><span class="sh">'</span><span class="p">]</span>
+    <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sh">''</span>
+    <span class="n">s</span><span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Choice of stock</span><span class="sh">'</span><span class="s">s list (dow, sp500, nasdaq, other, all, selected): </span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span>
+    <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_sp500</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_nasdaq</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_other</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">all</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">all</span><span class="sh">'</span>
+        <span class="n">dow_list_1</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_nasdaq</span><span class="p">()</span>
+        <span class="n">dow_list_2</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_other</span><span class="p">()</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">dow_list_1</span> <span class="o">+</span> <span class="n">dow_list_2</span>
+    <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">selected</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">selected</span><span class="sh">'</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sh">'</span><span class="s">data_ForTrading/selected_ticker.json</span><span class="sh">'</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_json</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">]</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+
+    <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">root_url</span><span class="p">,</span> <span class="n">index_list</span> <span class="o">=</span> <span class="n">dow_list</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="n">filename</span><span class="p">,</span> <span class="n">EACH</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ALL</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">SAVE</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">SHOW</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>It is needed what to set various factor like PER PBR and so on.</p>
+
+<p>And, we can choose parameter what you want in main funtion.</p>
+
+<h3 id="result">Result</h3>
+
+<p>It is example for dow index not to show dataframes which are setted as parameter is False.</p>
+
+<blockquote>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Choice of stock's list (dow, sp500, nasdaq, other, all, selected): dow
+Preprocessing each Financial Statements
+   
+Each factor preprocessing in Basic stats (PER PSR PBR PEG forPER Cap)
+
+----------------------------- SAVE DATA  PER ---------------------------------
+
+
+----------------------------- SAVE DATA  PSR ---------------------------------
+
+
+----------------------------- SAVE DATA  PBR ---------------------------------
+
+
+   ----------------------------- SAVE DATA  PEG ---------------------------------
+
+
+----------------------------- SAVE DATA  forPER ---------------------------------
+
+
+----------------------------- SAVE DATA  Cap ---------------------------------
+
+
+Each factor preprocessing in Additional stats (Beta DivRate ROE ROA PM Cash Debt)
+
+----------------------------- SAVE DATA  Beta ---------------------------------
+
+
+----------------------------- SAVE DATA  DivRate ---------------------------------
+
+
+----------------------------- SAVE DATA  ROE ---------------------------------
+
+
+----------------------------- SAVE DATA  ROA ---------------------------------
+
+
+----------------------------- SAVE DATA  PM ---------------------------------
+
+
+----------------------------- SAVE DATA  Cash ---------------------------------
+
+
+----------------------------- SAVE DATA  Debt ---------------------------------
+
+
+Each factor preprocessing in Balance sheets (TA)
+
+----------------------------- SAVE DATA  TA ---------------------------------
+
+
+Each factor preprocessing in Income sheets (TR)
+
+----------------------------- SAVE DATA  TR ---------------------------------
+
+
+Each factor preprocessing in Cash flow (DIV ISS)
+
+----------------------------- SAVE DATA  DIV ---------------------------------
+
+
+----------------------------- SAVE DATA  ISS ---------------------------------
+
+
+Preprocessing element in (stats addstats balsheets income flow)
+
+----------------------------- SAVE DATA  stats ---------------------------------
+
+
+
+----------------------------- SAVE DATA  addstats ---------------------------------
+
+
+For balance sheets
+100%|████████████████████████████████████████████████████████████████████| 30/30 [00:01&lt;00:00, 28.21it/s]
+
+----------------------------- SAVE DATA  balsheets ---------------------------------
+
+
+For income statements
+100%|████████████████████████████████████████████████████████████████████| 30/30 [00:00&lt;00:00, 45.14it/s]
+
+----------------------------- SAVE DATA  income ---------------------------------
+
+
+For cash flow
+100%|████████████████████████████████████████████████████████████████████| 30/30 [00:00&lt;00:00, 47.32it/s]
+
+----------------------------- SAVE DATA  flow ---------------------------------
+
+</code></pre></div>  </div>
+
+</blockquote>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Let us know how to preprocess stock’s financi statements in index.</p>
+
+<p>If you want to use this code, I’m very sorry that you should change code and make directory for data a little bit.</p>
+
+<p>I should appreciate and refer for many blog on google. Thanks a lot.</p>
+
+<p>If you satisfied this post you should check <a href="https://github.com/hanseopark/Stock/tree/master/Strategy">Github</a> and please <strong>Star</strong> :)</p>
+
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-2/">
+            The prediction of stock's price using Linear Regression for Machine Learning (2)
+            <small>04 Dec 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-1/">
+            The prediction of stock's price using Linear Regression for Machine Learning (1)
+            <small>28 Nov 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-04-financial-statements/">
+            How to get stock's financial statements?
+            <small>04 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+

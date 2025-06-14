@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      파이썬을 이용한 미국주식의 가격, 시세, 종가등을 얻기 &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/ko/2021-07-07-stock-price/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/ko/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item visible-links">
+						<a href="/2021-07-07-stock-price/" class="enabled">En </a>|<a href="/ko/2021-07-07-stock-price/"> Ko</a> </a>|<a href="/jp/2021-07-07-stock-price/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">파이썬을 이용한 미국주식의 가격, 시세, 종가등을 얻기</h1>
+  <span class="post-date">07 Jul 2021</span>
+  <h3 id="stocks-price">Stock’s price</h3>
+
+<p>이번 포스트에서 파이썬 (Python) API를 이용해서 미국의 단위주식의 가격을 소개할 예정입니다.</p>
+
+<p>주로 사용하는 API로는 두가지가 있습니다.</p>
+
+<ul>
+  <li>pandas_datareader API</li>
+</ul>
+
+<p>대표적으로 널리 사용되는 API이입니다. 사용법은 구글위에 다양한 정보가 있으니 참고해주시길 바랍니다.</p>
+
+<blockquote>
+  <p>pip install pandas-datareader</p>
+</blockquote>
+
+<ul>
+  <li>yahoo_fin API</li>
+</ul>
+
+<p>제가 자주 이용하는  API 입니다. 공식적이 API가 아니라 안정성이 떨어지지만 직접적으로 야후 파이넨셜 사이트에서 정보를 가져오기 떄문에 알기쉽게 데이터를 크롤링 할 수 있습니다.</p>
+
+<blockquote>
+  <p>pip install yahoo_fin</p>
+</blockquote>
+
+<p>2가지 전부 평가가 좋은 API입니다. 사용에 따라 두가지를 적절히 이용해주시기 바랍니다.</p>
+
+<h3 id="code-to-get-stocks-price">Code to get stock’s price</h3>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="n">yahoo_fin.stock_info</span> <span class="k">as</span> <span class="n">yfs</span>
+
+<span class="kn">from</span> <span class="n">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">index_name</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">run_yfs</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">run_pdr</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+
+    <span class="c1">## Configuration directory url
+</span>    <span class="n">url_data</span> <span class="o">=</span> <span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">data_origin/</span><span class="sh">'</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Example Apple inc</span><span class="sh">'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">run_pdr</span><span class="p">:</span>
+        <span class="n">df_aapl</span> <span class="o">=</span> <span class="n">pdr</span><span class="p">.</span><span class="nc">DataReader</span><span class="p">(</span><span class="sh">'</span><span class="s">AAPL</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">yahoo</span><span class="sh">'</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">run_yfs</span><span class="p">:</span>
+        <span class="n">start_day</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="sh">'</span><span class="s">%m/%d/%y</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">today</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="sh">'</span><span class="s">%m/%d/%y</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">df_aapl</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_data</span><span class="p">(</span><span class="sh">'</span><span class="s">AAPL</span><span class="sh">'</span><span class="p">,</span><span class="n">start_date</span><span class="o">=</span><span class="n">start_day</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">today</span><span class="p">)</span>
+        <span class="n">df_aapl</span> <span class="o">=</span> <span class="n">df_aapl</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+        <span class="n">df_aapl</span> <span class="o">=</span> <span class="n">df_aapl</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Open</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">high</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">High</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">low</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Low</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">close</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">adjclose</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">volume</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Volume</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">ticker</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+        <span class="n">df_aapl</span> <span class="o">=</span> <span class="n">df_aapl</span><span class="p">[[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">High</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Low</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Open</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Volume</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">]]</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">df_aapl</span><span class="p">)</span>
+
+    <span class="n">df_recent</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">({</span><span class="sh">'</span><span class="s">Recent_price</span><span class="sh">'</span><span class="p">:</span> <span class="p">[]})</span>
+    <span class="n">etf_values</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">error_symbols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="nf">tqdm</span><span class="p">(</span><span class="n">index_list</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">run_pdr</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pdr</span><span class="p">.</span><span class="nc">DataReader</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span><span class="sh">'</span><span class="s">yahoo</span><span class="sh">'</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">run_yfs</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_data</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span><span class="n">start_date</span><span class="o">=</span><span class="n">start_day</span><span class="p">,</span> <span class="n">end_date</span> <span class="o">=</span> <span class="n">today</span><span class="p">)</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">open</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Open</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">index</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">high</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">High</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">low</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Low</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">close</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">adjclose</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">volume</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Volume</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">ticker</span><span class="sh">'</span><span class="p">:</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">High</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Low</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Open</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Close</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Volume</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">]]</span>
+            <span class="n">df_recent</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="sh">'</span><span class="s">Recent_price</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_live_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">etf_values</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">error_symbols</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Error: </span><span class="sh">'</span><span class="p">,</span> <span class="n">error_symbols</span><span class="p">)</span>
+            <span class="n">df_recent</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="sh">'</span><span class="s">Recent_price</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_live_price</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">run_pdr</span><span class="p">:</span>
+        <span class="n">combined_value</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">etf_values</span><span class="p">)</span>
+        <span class="n">combined_value</span> <span class="o">=</span> <span class="n">combined_value</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+        <span class="n">combined_value</span><span class="o">=</span> <span class="n">combined_value</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">run_yfs</span><span class="p">:</span>
+        <span class="n">combined_value</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">etf_values</span><span class="p">)</span>
+        <span class="n">combined_value</span> <span class="o">=</span> <span class="n">combined_value</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+        <span class="n">combined_value</span> <span class="o">=</span> <span class="n">combined_value</span><span class="p">.</span><span class="nf">drop</span><span class="p">([</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">,</span><span class="sh">'</span><span class="s">level_1</span><span class="sh">'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_value</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">df_recent</span><span class="p">)</span>
+
+    <span class="n">url_value_data</span> <span class="o">=</span> <span class="n">url_data</span><span class="o">+</span><span class="sh">'</span><span class="s">FS_{0}_Value</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+    <span class="n">combined_value</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_value_data</span><span class="o">+</span><span class="sh">'</span><span class="s">.json</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">combined_value</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_value_data</span><span class="o">+</span><span class="sh">'</span><span class="s">.csv</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="n">url_recent_value_data</span> <span class="o">=</span> <span class="n">url_data</span><span class="o">+</span><span class="sh">'</span><span class="s">FS_{0}_Recent_Value</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">)</span>
+    <span class="n">df_recent</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_recent_value_data</span><span class="o">+</span><span class="sh">'</span><span class="s">.json</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">df_recent</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_recent_value_data</span><span class="o">+</span><span class="sh">'</span><span class="s">.csv</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">../config/config.json</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">root_url</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">root_dir</span><span class="sh">'</span><span class="p">]</span>
+
+    <span class="n">filename</span><span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Choice of stock</span><span class="sh">'</span><span class="s">s list (dow, sp500, nasdaq, other, selected): </span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_sp500</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_nasdaq</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_other</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">selected</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">root_url</span><span class="o">+</span><span class="sh">'</span><span class="s">/data_ForTrading/selected_ticker.json</span><span class="sh">'</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_json</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">]</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">dow_list</span><span class="p">)</span>
+
+    <span class="c1">## Define time of start to end ##
+</span>    <span class="c1">#td_1y = datetime.timedelta(weeks=52/2)
+</span>    <span class="n">start_day</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">datetime</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+    <span class="c1">#start_day = today-td_1y
+</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Price of stcok in {0} for date series and recent price</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">root_url</span><span class="p">,</span> <span class="n">index_list</span> <span class="o">=</span> <span class="n">dow_list</span><span class="p">,</span> <span class="n">index_name</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">today</span><span class="p">,</span> <span class="n">run_yfs</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">run_pdr</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>원하는 인덱스(Index)에 대해 yahoo_fin API를 이용하여 각 주식(Ticker)을 리스트로 부릅니다.</p>
+
+<p>각각의 Ticker에 대해 지정하 날로부터 오늘까지의 종가를 포함한 각 시간열에 대해 가격 정보를 얻어옵니다. 또한, 현재 가격만을 따로 데이터프레임으로 저장합니다. 추후 데이터 해석을 위해 미리 뽑아옵니다. Nasdaq과 other의 인덱스는 꽤 시간이 걸리므로 주의 해 주시길 바랍니다.</p>
+
+<h3 id="result">Result</h3>
+
+<p>위 코드를 진행할 경우 밑과 같은 결과가 나타납니다. yahoo_fin API에 의한 원시 데이터는 대표적으로 다우 인덱스 대해 뽑아봤습니다.</p>
+
+<blockquote>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     Ticker       Date        High         Low        Open       Close       Volume   Adj Close
+0       AAPL 2009-12-31    7.619643    7.520000    7.611786    7.526072  352410800.0    6.471693
+1       AAPL 2010-01-04    7.660714    7.585000    7.622500    7.643214  493729600.0    6.572423
+2       AAPL 2010-01-05    7.699643    7.616071    7.664286    7.656428  601904800.0    6.583786
+3       AAPL 2010-01-06    7.686786    7.526786    7.656428    7.534643  552160000.0    6.479064
+4       AAPL 2010-01-07    7.571429    7.466072    7.562500    7.520714  477131200.0    6.467088
+...      ...        ...         ...         ...         ...         ...          ...         ...
+84407    WMT 2021-06-21  136.750000  135.350006  135.660004  136.399994    6925000.0  136.399994
+84408    WMT 2021-06-22  137.720001  136.229996  136.229996  137.029999    6369000.0  137.029999
+84409    WMT 2021-06-23  136.990005  135.929993  136.500000  135.960007    6463500.0  135.960007
+84410    WMT 2021-06-24  137.240005  136.100006  136.169998  136.910004    7814700.0  136.910004
+84411    WMT 2021-06-25  138.860001  136.919998  137.130005  138.529999    9544400.0  138.529999
+
+[84412 rows x 8 columns]
+     Recent_price
+AAPL    133.110001
+AMGN    242.679993
+AXP     169.449997
+BA      248.380005
+CAT     216.309998
+CRM     241.869995
+CSCO     53.060001
+CVX     107.300003
+DIS     178.350006
+DOW      63.290001
+GS      368.769989
+HD      313.630005
+HON     218.740005
+IBM     146.839996
+INTC     55.910000
+JNJ     164.210007
+JPM     154.050003
+KO       54.320000
+MCD     232.419998
+MMM     194.750000
+MRK      77.199997
+MSFT    265.019989
+NKE     154.350006
+PG      134.919998
+TRV     151.720001
+UNH     404.950012
+V       237.320007
+VZ       56.380001
+WBA      52.160000
+WMT     138.529999
+</code></pre></div>  </div>
+
+</blockquote>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>이렇게 미국 주식의 시간열에 대한 주식 가격(시세, 종가) 및 현재가를 얻어봤습니다.</p>
+
+<p>만약, 실제로 이 코드를 실행하고 싶으시다면, 폴더 Url을 변경해서 사용해주세요.</p>
+
+<p>이 코드는 구글 위에 다양한 사람들에게 도움을 받았습니다. 대단히 감사합니다.</p>
+
+<p>만약 이 포스트가 만족스럽다면 <a href="https://github.com/hanseopark/Stock/tree/master/ChoiceTicker">Github</a> 의 <strong>Star</strong> 부탁드립니다 :)</p>
+
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ko/2021-07-07-financial-statements/">
+            파이썬을 이용한 미국 주식 재무재표 얻기
+            <small>07 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/ko/2020-04-01-ko/">
+            마크다운(Markdown) 사용법
+            <small>23 Jun 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/ko/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      The prediction of stock's price using Linear Regression for Machine Learning (2) &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/2021-11-28-ML-LinearRegression-2/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item lang">
+						<a href="/2021-11-28-ML-LinearRegression-2/">En </a>|<a href="/ko/2021-11-28-ML-LinearRegression-2/" class="enabled"> Ko</a> </a>|<a href="/jp/2021-11-28-ML-LinearRegression-2/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">The prediction of stock's price using Linear Regression for Machine Learning (2)</h1>
+  <span class="post-date">04 Dec 2021</span>
+  <h2 id="outline">Outline</h2>
+
+<p><a href="#1.-Introduction">1. Introduction</a></p>
+
+<h2 id="1-introduction">1. Introduction</h2>
+
+<p>This is purpose is prediction of stock’s price using ML with financial statements.</p>
+
+<p>I have already gotten financial statements up to yahoo’s fianance web.This method have alreday been explained by <a href="https://hanseopark.github.io/2021-07-04-financial-statements/">this link</a>. If you want how to get, you should check it. And this full idea has been already explained for <a href="https://www.kaggle.com/hanseopark/prediction-of-price-for-ml-with-finance-stats">kaggle.</a></p>
+
+<p>The overall method will be carried out in the following …</p>
+
+<ol>
+  <li><a href="#data-preprocessing">Dats Preprocessing</a></li>
+  <li>Correlation for features</li>
+  <li>Modeling</li>
+  <li>Conclusion</li>
+</ol>
+
+<h3 id="data-preprocessing">Data Preprocessing</h3>
+
+<p>It is imfortant to analyze data for ML. I only use the recent value and numeric datas. Some example are B (bilion) -&gt; 10^9 and etc… <a href="https://hanseopark.github.io/2021-07-10-pre-finance/">Link</a>. And then, I load preprocessed data.</p>
+
+<ul>
+  <li><a href="https://hanseopark.github.io/2021-11-28-ML-LinearRegression-1/">Previous Data Preprocessing</a></li>
+  <li><a href="#additional-data-preprocessing">Additional Data Preprocessing</a>
+    <ol>
+      <li><a href="#remove-index">Remove index</a></li>
+      <li><a href="#remove-columns">Remove columns</a></li>
+      <li><a href="#filling-numeric-data">Filling numeric data</a></li>
+      <li><a href="#feature-engineering">Feature Engineering</a></li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="additional-data-preprocessing">Additional Data Preprocessing</h3>
+
+<p>We have gotten price and inpormation of stocks, however, there are remained more to correlate somthings which are included to remove index and columns that are leak imformation. So, We need to correlate for porper value by reducing NaN values and adding or changing to numeric data.</p>
+
+<h4 id="remove-index">Remove index</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">marketCap</span><span class="sh">'</span><span class="p">].</span><span class="nf">notna</span><span class="p">()]</span>
+<span class="n">df_index_null</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">TotalNull</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">PercentOfNull</span><span class="sh">'</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">:</span>
+  <span class="n">temp_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,:]</span>
+  <span class="n">count_null</span> <span class="o">=</span> <span class="n">temp_df</span><span class="p">.</span><span class="nf">isnull</span><span class="p">().</span><span class="nf">sum</span><span class="p">()</span>
+  <span class="n">percent_count_null</span> <span class="o">=</span> <span class="n">count_null</span><span class="o">/</span><span class="nf">len</span><span class="p">(</span><span class="n">temp_df</span><span class="p">)</span>
+  <span class="n">df_index_null</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="sh">'</span><span class="s">TotalNull</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">count_null</span>
+  <span class="n">df_index_null</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ticker</span><span class="p">,</span> <span class="sh">'</span><span class="s">PercentOfNull</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">percent_count_null</span>
+
+<span class="n">remove_index</span> <span class="o">=</span> <span class="n">df_index_null</span><span class="p">[</span><span class="n">df_index_null</span><span class="p">[</span><span class="sh">'</span><span class="s">PercentOfNull</span><span class="sh">'</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.5</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>I hope to get the data over 50% about percent of null only. If you want to get value in wider range, you should just change 0.5 to 0.X.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unequal_in_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">portfolio</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()]</span>
+<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">unequal_in_index</span><span class="p">:</span>
+  <span class="n">portfolio</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tic</span> <span class="ow">in</span> <span class="n">portfolio</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">tic</span> <span class="ow">in</span> <span class="n">remove_index</span><span class="p">:</span>
+    <span class="n">remove_index</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="n">tic</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">remove_index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">After removing index: </span><span class="sh">'</span><span class="p">,</span> <span class="nf">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>It should need to correlate same method for portfolio. Because portpolio as for valid train use individually full train wihch is index.</p>
+
+<h4 id="remove-columns">Remove columns</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nulltotal</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">isnull</span><span class="p">().</span><span class="nf">sum</span><span class="p">().</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">nullpercent</span> <span class="o">=</span> <span class="p">(</span> <span class="n">df</span><span class="p">.</span><span class="nf">isnull</span><span class="p">().</span><span class="nf">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nf">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="p">).</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">nullpoint</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">([</span><span class="n">nulltotal</span><span class="p">,</span> <span class="n">nullpercent</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">Total number of null</span><span class="sh">'</span><span class="p">,</span>     <span class="sh">'</span><span class="s">Percent of null</span><span class="sh">'</span><span class="p">])</span>
+<span class="n">remove_cols</span> <span class="o">=</span> <span class="n">nullpercent</span><span class="p">[</span><span class="n">nullpercent</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">].</span><span class="nf">keys</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">drop</span><span class="p">(</span><span class="n">remove_cols</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">newtotal</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">isnull</span><span class="p">().</span><span class="nf">sum</span><span class="p">().</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In our analysis, we analyze the numeric datas for 84 financial statements. It is also needed to drop statements for leak information.</p>
+
+<p>I hope to get the data over 50% about percent of null only. If you want to get value in wider range, you should just change 0.5 to 0.X.</p>
+
+<h4 id="filling-numeric-data">Filling numeric data</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numeric_missed</span> <span class="o">=</span> <span class="n">newtotal</span><span class="p">.</span><span class="n">index</span>
+<span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">numeric_missed</span><span class="p">:</span>
+  <span class="n">df</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">feature</span><span class="p">].</span><span class="nf">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The missed data should just add 0 value.</p>
+
+<h4 id="feature-engineering">Feature Engineering</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">skew</span>
+<span class="n">numeric_feats</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">dtypes</span><span class="p">[</span><span class="n">df</span><span class="p">.</span><span class="n">dtypes</span> <span class="o">!=</span> <span class="sh">'</span><span class="s">object</span><span class="sh">'</span><span class="p">].</span><span class="n">index</span>
+<span class="n">skewed_feats</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">numeric_feats</span><span class="p">].</span><span class="nf">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nf">skew</span><span class="p">(</span><span class="n">x</span><span class="p">)).</span><span class="nf">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">high_skew</span> <span class="o">=</span> <span class="n">skewed_feats</span><span class="p">[</span><span class="nf">abs</span><span class="p">(</span><span class="n">skewed_feats</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>We could get features in high correlation.</p>
+
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-1/">
+            The prediction of stock's price using Linear Regression for Machine Learning (1)
+            <small>28 Nov 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-10-pre-finance/">
+            Preprocessing with financial statements
+            <small>10 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-04-financial-statements/">
+            How to get stock's financial statements?
+            <small>04 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+

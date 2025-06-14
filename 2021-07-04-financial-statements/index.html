@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      How to get stock's financial statements? &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/2021-07-04-financial-statements/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item lang">
+						<a href="/2021-07-04-financial-statements/">En </a>|<a href="/ko/2021-07-04-financial-statements/" class="enabled"> Ko</a> </a>|<a href="/jp/2021-07-04-financial-statements/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">How to get stock's financial statements?</h1>
+  <span class="post-date">04 Jul 2021</span>
+  <h3 id="stocks-financial-statements">Stock’s financial statements</h3>
+
+<p>It is important for stock to get the price as well as financial statements</p>
+
+<p>This is presented typically PER and ROA etc. The other’s factor like income statement and cash flow based on <a href="https://finance.yahoo.com">yahoo finance site</a> using <a href="https://pypi.org/project/yahoo-fin/">yahoo_fin API</a> with python and refer to <a href="http://theautomatic.net/yahoo_fin-documentation/">yahoo_fin documation</a>.</p>
+
+<ul>
+  <li><strong>yahoo_fin API</strong></li>
+</ul>
+
+<blockquote>
+  <p>pip install yahoo_fin</p>
+</blockquote>
+
+<p>I use this both API in condition.</p>
+
+<h3 id="code-to-get-stocks-financial-statements">Code to get stock’s financial statements</h3>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">yahoo_fin.stock_info</span> <span class="k">as</span> <span class="n">yfs</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="kn">from</span> <span class="n">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="n">json</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">index_list</span><span class="p">,</span> <span class="n">index_name</span><span class="p">):</span>
+
+    <span class="c1">## Configuration directory url
+</span>    <span class="n">url_data</span> <span class="o">=</span> <span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">data_origin/</span><span class="sh">'</span>
+
+    <span class="c1"># For check the table of one ticker like aapl
+</span>    <span class="n">aapl_quote</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_quote_table</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">aapl_val</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_stats_valuation</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">aapl_ext</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_stats</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">aapl_sheet</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_balance_sheet</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">aapl_income</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_income_statement</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">aapl_flow</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_cash_flow</span><span class="p">(</span><span class="sh">'</span><span class="s">aapl</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">quote</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_quote</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">basic</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_val</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">additional</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_ext</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">balance sheets</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_sheet</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">aapl_sheet</span><span class="p">.</span><span class="n">columns</span><span class="p">))</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">income statements</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_income</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">cash flow</span><span class="sh">'</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">aapl_flow</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">*</span><span class="sh">'</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># Get data in the current  olumn for each stock's valuation table
+</span>    <span class="n">dow_stats</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dow_addstats</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dow_balsheets</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dow_income</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">dow_flow</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">error_symbols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="nf">tqdm</span><span class="p">(</span><span class="n">index_list</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Getteing Summary
+</span>            <span class="n">basic</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_stats_valuation</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">basic</span> <span class="o">=</span><span class="n">basic</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">basic</span><span class="p">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Attribute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Recent</span><span class="sh">'</span><span class="p">]</span>
+            <span class="n">dow_stats</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">basic</span>
+
+            <span class="c1"># Getting additioanl stats
+</span>            <span class="n">add</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_stats</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">add</span><span class="p">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Attribute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Value</span><span class="sh">'</span><span class="p">]</span>
+            <span class="n">dow_addstats</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">add</span>
+
+            <span class="c1"># Getting balance sheets
+</span>            <span class="n">sheets</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_balance_sheet</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">dow_balsheets</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">sheets</span>
+
+            <span class="c1"># Getting income statements
+</span>            <span class="n">income</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_income_statement</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">dow_income</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">income</span>
+
+            <span class="c1"># Getting cash flow statements
+</span>            <span class="n">flow</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">get_cash_flow</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="n">dow_flow</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">flow</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">error_symbols</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+            <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Error ticker: </span><span class="sh">'</span><span class="p">,</span> <span class="n">ticker</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">error symol: </span><span class="sh">'</span><span class="p">,</span> <span class="n">error_symbols</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">dow_balsheets</span><span class="p">.</span><span class="nf">keys</span><span class="p">():</span>
+        <span class="n">leng</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">dow_balsheets</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">dow_balsheets</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Before_</span><span class="sh">'</span><span class="o">+</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">leng</span><span class="p">)]</span>
+        <span class="n">dow_balsheets</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">dow_balsheets</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">Before_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Recent</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">dow_income</span><span class="p">.</span><span class="nf">keys</span><span class="p">():</span>
+        <span class="n">leng</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">dow_income</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">dow_income</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Before_</span><span class="sh">'</span><span class="o">+</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">leng</span><span class="p">)]</span>
+        <span class="n">dow_income</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">dow_income</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">Before_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Recent</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="n">dow_flow</span><span class="p">.</span><span class="nf">keys</span><span class="p">():</span>
+        <span class="n">leng</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">dow_flow</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">dow_flow</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">Before_</span><span class="sh">'</span><span class="o">+</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">leng</span><span class="p">)]</span>
+        <span class="n">dow_flow</span><span class="p">[</span><span class="n">ticker</span><span class="p">]</span> <span class="o">=</span> <span class="n">dow_flow</span><span class="p">[</span><span class="n">ticker</span><span class="p">].</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">Before_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Recent</span><span class="sh">'</span><span class="p">})</span>
+
+
+    <span class="n">combined_stats</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">dow_stats</span><span class="p">)</span>
+    <span class="n">combined_stats</span> <span class="o">=</span> <span class="n">combined_stats</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+    <span class="n">combined_stats</span> <span class="o">=</span> <span class="n">combined_stats</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="n">combined_addstats</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">dow_addstats</span><span class="p">)</span>
+    <span class="n">combined_addstats</span> <span class="o">=</span> <span class="n">combined_addstats</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+    <span class="n">combined_addstats</span> <span class="o">=</span> <span class="n">combined_addstats</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="n">combined_balsheets</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">dow_balsheets</span><span class="p">)</span>
+    <span class="n">combined_balsheets</span> <span class="o">=</span> <span class="n">combined_balsheets</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+    <span class="n">combined_balsheets</span> <span class="o">=</span> <span class="n">combined_balsheets</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="n">combined_income</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">dow_income</span><span class="p">)</span>
+    <span class="n">combined_income</span> <span class="o">=</span> <span class="n">combined_income</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+    <span class="n">combined_income</span> <span class="o">=</span> <span class="n">combined_income</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="n">combined_flow</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">dow_flow</span><span class="p">)</span>
+    <span class="n">combined_flow</span> <span class="o">=</span> <span class="n">combined_flow</span><span class="p">.</span><span class="nf">reset_index</span><span class="p">()</span>
+    <span class="n">combined_flow</span> <span class="o">=</span> <span class="n">combined_flow</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="sh">'</span><span class="s">level_0</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">})</span>
+
+    <span class="k">del</span> <span class="n">combined_stats</span><span class="p">[</span><span class="sh">'</span><span class="s">level_1</span><span class="sh">'</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">combined_addstats</span><span class="p">[</span><span class="sh">'</span><span class="s">level_1</span><span class="sh">'</span><span class="p">]</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_stats</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_addstats</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_balsheets</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_income</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">combined_flow</span><span class="p">)</span>
+
+    <span class="n">list_stats</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">stats</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">addstats</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">balsheets</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">income</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">flow</span><span class="sh">'</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">list_stats</span><span class="p">:</span>
+        <span class="n">url_FS</span> <span class="o">=</span> <span class="n">url_data</span><span class="o">+</span><span class="sh">'</span><span class="s">FS_{0}_{1}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">index_name</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">stats</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">combined_stats</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">addstats</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">combined_addstats</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">balsheets</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">combined_balsheets</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">income</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">combined_income</span>
+        <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="sh">'</span><span class="s">flow</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">combined_flow</span>
+        <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url_FS</span><span class="o">+</span><span class="sh">'</span><span class="s">.json</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url_FS</span><span class="o">+</span><span class="sh">'</span><span class="s">.csv</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">../config/config.json</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">root_url</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="sh">'</span><span class="s">root_dir</span><span class="sh">'</span><span class="p">]</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Choice of stock</span><span class="sh">'</span><span class="s">s list (dow, sp500, nasdaq, other, selected): </span><span class="sh">"</span><span class="p">)</span>
+
+    <span class="c1"># Get list of Dow tickers
+</span>    <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_sp500</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_nasdaq</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_other</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">filename</span> <span class="o">==</span> <span class="sh">'</span><span class="s">selected</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">root_url</span><span class="o">+</span><span class="sh">'</span><span class="s">/data_ForTrading/selected_ticker.json</span><span class="sh">'</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_json</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">temp_pd</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">]</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">temp_pd</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">dow_list</span><span class="p">)</span>
+
+    <span class="nf">main</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">root_url</span><span class="p">,</span> <span class="n">index_list</span> <span class="o">=</span> <span class="n">dow_list</span><span class="p">,</span> <span class="n">index_name</span> <span class="o">=</span> <span class="n">filename</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>FIrst of all, we can check how to get statement by yahoo_fin API for raw.</p>
+
+<p>And then, I select the index of stock for us using API.</p>
+
+<p>The dataframe is made by continus ticker with adjsuting change refer to ducumation of yahoo_fin API.</p>
+
+<h3 id="result">Result</h3>
+
+<p>one example result by ticker of AAPL for raw yahoo_fin API</p>
+
+<blockquote>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>****************************************************************************************************
+basic
+                             0      1
+0      Market Cap (intraday) 5  2.34T
+1           Enterprise Value 3   2.3T
+2                 Trailing P/E  31.46
+3                Forward P/E 1  26.16
+4  PEG Ratio (5 yr expected) 1   1.45
+5            Price/Sales (ttm)   7.18
+6             Price/Book (mrq)  33.76
+7   Enterprise Value/Revenue 3   7.07
+8    Enterprise Value/EBITDA 7  23.05
+****************************************************************************************************
+additional
+                                         Attribute         Value
+0                                Beta (5Y Monthly)          1.21
+1                                 52-Week Change 3           NaN
+2                          S&amp;P500 52-Week Change 3           NaN
+3                                   52 Week High 3        145.09
+4                                    52 Week Low 3         89.14
+5                          50-Day Moving Average 3         128.8
+6                         200-Day Moving Average 3        129.16
+7                              Avg Vol (3 month) 3        82.31M
+8                               Avg Vol (10 day) 3        64.61M
+9                             Shares Outstanding 5        16.69B
+10                    Implied Shares Outstanding 6           NaN
+11                                           Float        16.67B
+12                            % Held by Insiders 1         0.07%
+13                        % Held by Institutions 1        58.69%
+14                   Shares Short (May 27, 2021) 4       123.12M
+15                    Short Ratio (May 27, 2021) 4          1.36
+16               Short % of Float (May 27, 2021) 4         0.74%
+17  Short % of Shares Outstanding (May 27, 2021) 4         0.74%
+18       Shares Short (prior month Apr 29, 2021) 4        82.71M
+19                  Forward Annual Dividend Rate 4          0.88
+20                 Forward Annual Dividend Yield 4         0.66%
+21                 Trailing Annual Dividend Rate 3          0.82
+22                Trailing Annual Dividend Yield 3         0.60%
+23                 5 Year Average Dividend Yield 4          1.34
+24                                  Payout Ratio 4        18.34%
+25                                 Dividend Date 3  May 12, 2021
+26                              Ex-Dividend Date 4  May 06, 2021
+27                             Last Split Factor 2           4:1
+28                               Last Split Date 3  Aug 30, 2020
+29                                Fiscal Year Ends  Sep 25, 2020
+30                       Most Recent Quarter (mrq)  Mar 26, 2021
+31                                   Profit Margin        23.45%
+32                          Operating Margin (ttm)        27.32%
+33                          Return on Assets (ttm)        16.90%
+34                          Return on Equity (ttm)       103.40%
+35                                   Revenue (ttm)       325.41B
+36                         Revenue Per Share (ttm)         19.14
+37                  Quarterly Revenue Growth (yoy)        53.60%
+38                              Gross Profit (ttm)       104.96B
+39                                          EBITDA        99.82B
+40                  Net Income Avi to Common (ttm)        76.31B
+41                               Diluted EPS (ttm)          4.45
+42                 Quarterly Earnings Growth (yoy)       110.10%
+43                                Total Cash (mrq)        69.83B
+44                      Total Cash Per Share (mrq)          4.18
+45                                Total Debt (mrq)       134.74B
+46                         Total Debt/Equity (mrq)        194.78
+47                             Current Ratio (mrq)          1.14
+48                      Book Value Per Share (mrq)          4.15
+49                       Operating Cash Flow (ttm)        99.59B
+50                    Levered Free Cash Flow (ttm)        80.12B
+****************************************************************************************************
+balance sheets
+endDate                    2020-09-26    2019-09-28    2018-09-29    2017-09-30
+Breakdown
+totalLiab                258549000000  248028000000  258578000000  241272000000
+totalStockholderEquity    65339000000   90488000000  107147000000  134047000000
+otherCurrentLiab          47867000000   43242000000   39293000000   38099000000
+totalAssets              323888000000  338516000000  365725000000  375319000000
+commonStock               50779000000   45174000000   40201000000   35867000000
+otherCurrentAssets        11264000000   12352000000   12087000000   13936000000
+retainedEarnings          14966000000   45898000000   70400000000   98330000000
+otherLiab                 46108000000   50503000000   48914000000   43251000000
+treasuryStock              -406000000    -584000000   -3454000000    -150000000
+otherAssets               33952000000   32978000000   22283000000   18177000000
+cash                      38016000000   48844000000   25913000000   20289000000
+totalCurrentLiabilities  105392000000  105718000000  115929000000  100814000000
+shortLongTermDebt          8773000000   10260000000    8784000000    6496000000
+otherStockholderEquity     -406000000    -584000000   -3454000000    -150000000
+propertyPlantEquipment    45336000000   37378000000   41304000000   33783000000
+totalCurrentAssets       143713000000  162819000000  131339000000  128645000000
+longTermInvestments      100887000000  105341000000  170799000000  194714000000
+netTangibleAssets         65339000000   90488000000  107147000000  134047000000
+shortTermInvestments      52927000000   51713000000   40388000000   53892000000
+netReceivables            37445000000   45804000000   48995000000   35673000000
+longTermDebt              98667000000   91807000000   93735000000   97207000000
+inventory                  4061000000    4106000000    3956000000    4855000000
+accountsPayable           42296000000   46236000000   55888000000   44242000000
+****************************************************************************************************
+income statements
+endDate                              2020-09-26    2019-09-28    2018-09-29    2017-09-30
+Breakdown
+researchDevelopment                 18752000000   16217000000   14236000000   11581000000
+effectOfAccountingCharges                  None          None          None          None
+incomeBeforeTax                     67091000000   65737000000   72903000000   64089000000
+minorityInterest                           None          None          None          None
+netIncome                           57411000000   55256000000   59531000000   48351000000
+sellingGeneralAdministrative        19916000000   18245000000   16705000000   15261000000
+grossProfit                        104956000000   98392000000  101839000000   88186000000
+ebit                                66288000000   63930000000   70898000000   61344000000
+operatingIncome                     66288000000   63930000000   70898000000   61344000000
+otherOperatingExpenses                     None          None          None          None
+interestExpense                     -2873000000   -3576000000   -3240000000   -2323000000
+extraordinaryItems                         None          None          None          None
+nonRecurring                               None          None          None          None
+otherItems                                 None          None          None          None
+incomeTaxExpense                     9680000000   10481000000   13372000000   15738000000
+totalRevenue                       274515000000  260174000000  265595000000  229234000000
+totalOperatingExpenses             208227000000  196244000000  194697000000  167890000000
+costOfRevenue                      169559000000  161782000000  163756000000  141048000000
+totalOtherIncomeExpenseNet            803000000    1807000000    2005000000    2745000000
+discontinuedOperations                     None          None          None          None
+netIncomeFromContinuingOps          57411000000   55256000000   59531000000   48351000000
+netIncomeApplicableToCommonShares   57411000000   55256000000   59531000000   48351000000
+****************************************************************************************************
+cash flow
+endDate                                 2020-09-26   2019-09-28   2018-09-29   2017-09-30
+Breakdown
+investments                             5335000000  58093000000  30845000000 -33542000000
+changeToLiabilities                    -1981000000  -2548000000   9172000000   8373000000
+totalCashflowsFromInvestingActivities  -4289000000  45896000000  16066000000 -46446000000
+netBorrowings                           2499000000  -7819000000    432000000  29014000000
+totalCashFromFinancingActivities      -86820000000 -90976000000 -87876000000 -17974000000
+changeToOperatingActivities              881000000   -896000000  30016000000  -8480000000
+issuanceOfStock                          880000000    781000000    669000000    555000000
+netIncome                              57411000000  55256000000  59531000000  48351000000
+changeInCash                          -10435000000  24311000000   5624000000   -195000000
+repurchaseOfStock                     -75992000000 -69714000000 -75265000000 -34774000000
+totalCashFromOperatingActivities       80674000000  69391000000  77434000000  64225000000
+depreciation                           11056000000  12547000000  10903000000  10157000000
+otherCashflowsFromInvestingActivities   -791000000  -1078000000   -745000000   -124000000
+dividendsPaid                         -14081000000 -14119000000 -13712000000 -12769000000
+changeToInventory                       -127000000   -289000000    828000000  -2723000000
+changeToAccountReceivables              6917000000    245000000  -5322000000  -2093000000
+otherCashflowsFromFinancingActivities   -126000000   -105000000   -105000000   -105000000
+changeToNetincome                       6517000000   5076000000 -27694000000  10640000000
+capitalExpenditures                    -7309000000 -10495000000 -13313000000 -12451000000
+****************************************************************************************************
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>Then, I change adjusting data frame for analysis.</p>
+
+<p>It is one example for dow index</p>
+
+<blockquote>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   Ticker                    Attribute Recent
+0     AAPL      Market Cap (intraday) 5  2.34T
+1     AAPL           Enterprise Value 3   2.3T
+2     AAPL                 Trailing P/E  31.46
+3     AAPL                Forward P/E 1  26.16
+4     AAPL  PEG Ratio (5 yr expected) 1   1.45
+..     ...                          ...    ...
+265    WMT  PEG Ratio (5 yr expected) 1   3.26
+266    WMT            Price/Sales (ttm)   0.70
+267    WMT             Price/Book (mrq)   5.02
+268    WMT   Enterprise Value/Revenue 3   0.76
+269    WMT    Enterprise Value/EBITDA 7  10.78
+
+[270 rows x 3 columns]
+    Ticker                     Attribute   Value
+0      AAPL             Beta (5Y Monthly)    1.21
+1      AAPL              52-Week Change 3     NaN
+2      AAPL       S&amp;P500 52-Week Change 3     NaN
+3      AAPL                52 Week High 3  145.09
+4      AAPL                 52 Week Low 3   89.14
+...     ...                           ...     ...
+1525    WMT       Total Debt/Equity (mrq)   74.74
+1526    WMT           Current Ratio (mrq)    0.95
+1527    WMT    Book Value Per Share (mrq)   27.93
+1528    WMT     Operating Cash Flow (ttm)  31.91B
+1529    WMT  Levered Free Cash Flow (ttm)  17.24B
+
+[1530 rows x 3 columns]
+   Ticker               Breakdown        Recent      Before_1      Before_2      Before_3
+0     AAPL               totalLiab  2.585490e+11  2.480280e+11  2.585780e+11  2.412720e+11
+1     AAPL  totalStockholderEquity  6.533900e+10  9.048800e+10  1.071470e+11  1.340470e+11
+2     AAPL        otherCurrentLiab  4.786700e+10  4.324200e+10  3.929300e+10  3.809900e+10
+3     AAPL             totalAssets  3.238880e+11  3.385160e+11  3.657250e+11  3.753190e+11
+4     AAPL             commonStock  5.077900e+10  4.517400e+10  4.020100e+10  3.586700e+10
+..     ...                     ...           ...           ...           ...           ...
+784    WMT       netTangibleAssets  4.704200e+10  3.839600e+10  3.551500e+10  5.962700e+10
+785    WMT          netReceivables  6.516000e+09  6.284000e+09  6.283000e+09  5.614000e+09
+786    WMT            longTermDebt  4.165000e+10  4.441000e+10  4.394800e+10  3.023100e+10
+787    WMT               inventory  4.494900e+10  4.443500e+10  4.426900e+10  4.378300e+10
+788    WMT         accountsPayable  4.914100e+10  4.697300e+10  4.706000e+10  4.609200e+10
+
+[789 rows x 6 columns]
+   Ticker                          Breakdown        Recent      Before_1      Before_2      Before_3
+0     AAPL                researchDevelopment   18752000000   16217000000   14236000000   11581000000
+1     AAPL          effectOfAccountingCharges          None          None          None          None
+2     AAPL                    incomeBeforeTax   67091000000   65737000000   72903000000   64089000000
+3     AAPL                   minorityInterest          None          None          None          None
+4     AAPL                          netIncome   57411000000   55256000000   59531000000   48351000000
+..     ...                                ...           ...           ...           ...           ...
+655    WMT                      costOfRevenue  420315000000  394605000000  385301000000  373396000000
+656    WMT         totalOtherIncomeExpenseNet   -6384000000   -1352000000  -10497000000   -5814000000
+657    WMT             discontinuedOperations          None          None          None          None
+658    WMT         netIncomeFromContinuingOps   13706000000   15201000000    7179000000   10523000000
+659    WMT  netIncomeApplicableToCommonShares   13510000000   14881000000    6670000000    9862000000
+
+[660 rows x 6 columns]
+   Ticker                              Breakdown        Recent      Before_1      Before_2      Before_3
+0     AAPL                            investments  5.335000e+09  5.809300e+10  3.084500e+10 -3.354200e+10
+1     AAPL                    changeToLiabilities -1.981000e+09 -2.548000e+09  9.172000e+09  8.373000e+09
+2     AAPL  totalCashflowsFromInvestingActivities -4.289000e+09  4.589600e+10  1.606600e+10 -4.644600e+10
+3     AAPL                          netBorrowings  2.499000e+09 -7.819000e+09  4.320000e+08  2.901400e+10
+4     AAPL       totalCashFromFinancingActivities -8.682000e+10 -9.097600e+10 -8.787600e+10 -1.797400e+10
+..     ...                                    ...           ...           ...           ...           ...
+539    WMT                      changeToInventory -2.395000e+09 -3.000000e+08 -1.311000e+09 -1.400000e+08
+540    WMT             changeToAccountReceivables -1.086000e+09  1.540000e+08 -3.680000e+08 -1.074000e+09
+541    WMT  otherCashflowsFromFinancingActivities -1.670000e+09 -1.463000e+09 -1.060000e+09 -4.018000e+09
+542    WMT                      changeToNetincome  3.440000e+09 -2.860000e+08  1.011000e+10  4.703000e+09
+543    WMT                    capitalExpenditures -1.026400e+10 -1.070500e+10 -1.034400e+10 -1.005100e+10
+
+[544 rows x 6 columns]
+</code></pre></div>  </div>
+
+</blockquote>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Let us know how to get stock’s financi statements in index.</p>
+
+<p>If you want to use this code, I’m very sorry that you should change code and make directory for data a little bit.</p>
+
+<p>I should appreciate and refer for many blog on google. Thanks a lot.</p>
+
+<p>If you satisfied this post you should check <a href="https://github.com/hanseopark/Stock/tree/master/Strategy">Github</a> and please <strong>Star</strong> :)</p>
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-2/">
+            The prediction of stock's price using Linear Regression for Machine Learning (2)
+            <small>04 Dec 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-1/">
+            The prediction of stock's price using Linear Regression for Machine Learning (1)
+            <small>28 Nov 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-10-pre-finance/">
+            Preprocessing with financial statements
+            <small>10 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+

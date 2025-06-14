@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Bollinger band with python &middot; HAN's BLOG
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://hanseopark.github.io/2021-06-25-Bollinger-Band/">
+  
+
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/poole.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/syntax.css">
+  <link rel="stylesheet" href="https://hanseopark.github.io/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://hanseopark.github.io/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="https://hanseopark.github.io/public/favicon.ico">
+
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://hanseopark.github.io/atom.xml">
+
+  
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+	<td>
+	<a href= https://github.com/hanseopark> <i class="fab fa-github"></i> </a>
+	<a style="padding-left:25px;" href= https://www.kaggle.com/hanseopark> <i class="fab fa-kaggle"></i> </a>
+	<a style="padding-left:25px;" href= https://www.linkedin.com/in/hanseo-park-504100201> <i class="fab fa-linkedin"></i> </a>
+	</td>
+
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://hanseopark.github.io/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="https://hanseopark.github.io/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v.zip">Download</a>
+    <a class="sidebar-nav-item" href="">GitHub project</a> -->
+  </nav>
+  <div class="sidebar-item">
+    <p>
+	  <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fhanseopark.github.io&count_bg=%23D1D1D1&title_bg=%23555555&icon=xampp.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
+      &copy; 2025. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+
+
+        <div class="container">
+
+          <h3 class="masthead-title">
+            <a href="/" title="Home">HAN's BLOG</a>
+
+            <small></small>
+		<div class="head-right">
+			<nav id="lang-sel">
+				<ul class="lang">
+					
+					
+					
+					
+					<li class="masthead_menu-item lang">
+						<a href="/2021-06-25-Bollinger-Band/">En </a>|<a href="/ko/2021-06-25-Bollinger-Band/" class="enabled"> Ko</a> </a>|<a href="/jp/2021-06-25-Bollinger-Band/" class="enabled"> Jp</a>
+					</li>
+					
+				</ul>
+			</nav>
+		</div>
+
+
+			
+          </h3>
+
+		<div>
+
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Bollinger band with python</h1>
+  <span class="post-date">25 Jun 2021</span>
+  <h3 id="bollinger-band-bb">Bollinger Band (BB)</h3>
+
+<p>The bollinnger band is mening of standard deviation with calculation of moving average during 20, 60, and 120.</p>
+
+<p>It has been known to have tendecy narrow to wide and wide to narrow again.</p>
+
+<p>Additionally, If price of stock is over the line by BB, It has tendecy to be upper the line and If this is under the linne by BB, It has tendecu to be lower.</p>
+
+<p>This is presented with price of stock and moving average line with Python.</p>
+
+<p>It is needed to be downlaod on the web site. We have very useful method using <strong>pandas_datareader</strong> API.</p>
+
+<blockquote>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install pandas-datareader
+</code></pre></div>  </div>
+
+</blockquote>
+
+<h3 id="class-code">Class code</h3>
+
+<p>Anyway, the code of class is below.</p>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># classBB.py
+</span><span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">class</span> <span class="nc">Stocks</span><span class="p">:</span>
+		 <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">end_day</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="sh">''</span><span class="p">,</span> <span class="n">Offline</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+         <span class="n">self</span><span class="p">.</span><span class="n">symbol</span> <span class="o">=</span> <span class="n">symbol</span>
+         <span class="n">self</span><span class="p">.</span><span class="n">start_day</span> <span class="o">=</span> <span class="n">start_day</span>
+         <span class="n">self</span><span class="p">.</span><span class="n">end_day</span> <span class="o">=</span> <span class="n">end_day</span>
+         <span class="n">self</span><span class="p">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+         <span class="n">self</span><span class="p">.</span><span class="n">Offline</span> <span class="o">=</span> <span class="n">Offline</span>
+
+     <span class="k">def</span> <span class="nf">get_price_data</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+         <span class="nf">if </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">Offline</span> <span class="o">==</span> <span class="bp">True</span><span class="p">):</span>
+             <span class="n">url_price</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">/FS_{0}_Value.json</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span><span class="p">)</span> <span class="c1"># If you have nasdaq stocks, you'd like to choose  nasdaq stocks rather than sp500 or dow to have many data sets
+</span>             <span class="n">combined_price</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">read_json</span><span class="p">(</span><span class="n">url_price</span><span class="p">)</span>
+             <span class="n">df</span> <span class="o">=</span> <span class="n">combined_price</span><span class="p">[</span><span class="n">combined_price</span><span class="p">.</span><span class="n">Ticker</span><span class="p">.</span><span class="nb">str</span><span class="p">.</span><span class="nf">contains</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">symbol</span><span class="p">)]</span>
+             <span class="n">df_price</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="nf">copy</span><span class="p">()</span>
+             <span class="n">df_price</span> <span class="o">=</span> <span class="n">df_price</span><span class="p">.</span><span class="nf">set_index</span><span class="p">(</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">)</span>
+             <span class="n">df_price</span> <span class="o">=</span> <span class="n">df_price</span><span class="p">.</span><span class="nf">drop</span><span class="p">([</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+             <span class="n">df_price</span> <span class="o">=</span> <span class="n">df_price</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">start_day</span> <span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">end_day</span><span class="p">]</span>
+
+         <span class="k">else</span><span class="p">:</span>
+             <span class="n">df_price</span> <span class="o">=</span> <span class="n">pdr</span><span class="p">.</span><span class="nc">DataReader</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">symbol</span><span class="p">,</span> <span class="sh">'</span><span class="s">yahoo</span><span class="sh">'</span><span class="p">,</span><span class="n">self</span><span class="p">.</span><span class="n">start_day</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">end_day</span><span class="p">)</span>
+
+         <span class="k">return</span> <span class="n">df_price</span>
+
+     <span class="k">def</span> <span class="nf">with_moving_ave</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+         <span class="n">df_price</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">get_price_data</span><span class="p">()</span>
+         <span class="n">ma5</span><span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+         <span class="n">ma20</span><span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+         <span class="n">ma60</span><span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+         <span class="n">ma120</span><span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span> <span class="o">=</span> <span class="mi">120</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+         <span class="n">std</span> <span class="o">=</span> <span class="n">df_price</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">].</span><span class="nf">rolling</span><span class="p">(</span><span class="n">window</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="nf">std</span><span class="p">()</span>
+         <span class="n">bol_upper</span> <span class="o">=</span> <span class="n">ma20</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">std</span>
+         <span class="n">bol_down</span> <span class="o">=</span> <span class="n">ma20</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">std</span>
+
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">MA5</span><span class="sh">'</span><span class="p">,</span> <span class="n">ma5</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">MA20</span><span class="sh">'</span><span class="p">,</span> <span class="n">ma20</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">MA60</span><span class="sh">'</span><span class="p">,</span> <span class="n">ma60</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">MA120</span><span class="sh">'</span><span class="p">,</span> <span class="n">ma120</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">bol_upper</span><span class="sh">'</span><span class="p">,</span> <span class="n">bol_upper</span><span class="p">)</span>
+         <span class="n">df_price</span><span class="p">.</span><span class="nf">insert</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">df_price</span><span class="p">.</span><span class="n">columns</span><span class="p">),</span> <span class="sh">'</span><span class="s">bol_down</span><span class="sh">'</span><span class="p">,</span> <span class="n">bol_down</span><span class="p">)</span>
+
+         <span class="k">return</span> <span class="n">df_price</span>
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>The function get_price_data() is meaning to be download for online by yahoo finance for real time and another method to be analyzied for offline by local after download the same method. It is explaind later :)</p>
+
+<h3 id="main-code-of-ploting">Main Code of Ploting</h3>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># PlotBB.py
+</span> 
+<span class="kn">import</span> <span class="n">pandas_datareader</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="n">matplotlib.ticker</span> <span class="k">as</span> <span class="n">ticker</span>
+<span class="kn">from</span> <span class="n">matplotlib</span> <span class="kn">import</span> <span class="n">gridspec</span>
+<span class="kn">from</span> <span class="n">mplfinance.original_flavor</span> <span class="kn">import</span> <span class="n">candlestick2_ohlc</span>
+
+<span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="n">classBB</span> <span class="kn">import</span> <span class="n">Stocks</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">td_1y</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">52</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1">#start_day = datetime.datetime(2019,1,1)
+</span>    <span class="c1">#end_day = datetime.datetime(2021,5,1)
+</span>    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+    <span class="n">start_day</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">td_1y</span>
+
+    <span class="c1"># To test just a ticker for making class
+</span>    <span class="n">symbol</span> <span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">'</span><span class="s">Write ticker name like AAPL: </span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">url_data</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/Users/hanseopark/Work/stock/data_origin/</span><span class="sh">'</span>
+
+    <span class="n">offline_test</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">stock</span> <span class="o">=</span> <span class="nc">Stocks</span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url_data</span><span class="p">,</span> <span class="n">Offline</span><span class="o">=</span> <span class="n">offline_test</span><span class="p">)</span>
+
+    <span class="c1">## For figure
+</span>    <span class="n">df</span> <span class="o">=</span> <span class="n">stock</span><span class="p">.</span><span class="nf">with_moving_ave</span><span class="p">()</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">str</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="p">.</span><span class="nc">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax_main</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax_1</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">x_date</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">pos</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">index</span><span class="p">[</span><span class="nf">int</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)][:</span><span class="mi">7</span><span class="p">]</span>
+        <span class="k">except</span> <span class="nb">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sh">''</span>
+    <span class="c1"># ax_main
+</span>    <span class="n">ax_main</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">MaxNLocator</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_formatter</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">FuncFormatter</span><span class="p">(</span><span class="n">x_date</span><span class="p">))</span>
+
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">set_title</span><span class="p">(</span><span class="n">symbol</span><span class="o">+</span><span class="sh">'</span><span class="s"> stock</span><span class="sh">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span> <span class="p">)</span>
+    <span class="c1">#ax_main.set_xlabel('Date')
+</span>    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">MA5</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">MA5</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">MA20</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">MA20</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">MA60</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">MA60</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">MA120</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">MA120</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_upper</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">bol_upper</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_down</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">bol_down</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">fill_between</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_down</span><span class="sh">'</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_upper</span><span class="sh">'</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="sh">'</span><span class="s">gray</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="nf">candlestick2_ohlc</span><span class="p">(</span><span class="n">ax_main</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Open</span><span class="sh">'</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">High</span><span class="sh">'</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Low</span><span class="sh">'</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Close</span><span class="sh">'</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">colorup</span><span class="o">=</span><span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">,</span> <span class="n">colordown</span><span class="o">=</span><span class="sh">'</span><span class="s">b</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="n">ax_main</span><span class="p">.</span><span class="nf">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># ax_1
+</span>    <span class="n">ax_1</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_locator</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">MaxNLocator</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">ax_1</span><span class="p">.</span><span class="n">xaxis</span><span class="p">.</span><span class="nf">set_major_formatter</span><span class="p">(</span><span class="n">ticker</span><span class="p">.</span><span class="nc">FuncFormatter</span><span class="p">(</span><span class="n">x_date</span><span class="p">))</span>
+    <span class="n">ax_1</span><span class="p">.</span><span class="nf">set_xlabel</span><span class="p">(</span><span class="sh">'</span><span class="s">Date</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_1</span><span class="p">.</span><span class="nf">set_ylabel</span><span class="p">(</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">ax_1</span><span class="p">.</span><span class="nf">plot</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">].</span><span class="nf">mean</span><span class="p">()</span>
+    <span class="n">ax_1</span><span class="p">.</span><span class="nf">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xmax</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="sh">'</span><span class="s">red</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="nf">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+     <span class="nf">main</span><span class="p">()</span>
+</code></pre></div>  </div>
+
+</blockquote>
+
+<p>To be choice from start day to end day and if it checks offline test or not</p>
+
+<p>For figure, using gridspec to be seperated canvas and candlestick2_ohlc that has advatage to make candlestick plot easily.</p>
+
+<p>Any other plot library is easily explaind by google :) just search.</p>
+
+<h3 id="example-figure">Example figure</h3>
+
+<p><img src="../images/example_fig_BB.png" alt="image info" /></p>
+
+<p>Typical ticker is AAPL(Apple). upper figure is presented price with BB and down figure is presented by only standard deviation at 2021-06-25.</p>
+
+<h3 id="model-selection">Model, Selection</h3>
+
+<p>For using Bolliner band, we can make model and select ticker in index (Dow, S&amp;P500 etc)?</p>
+
+<p>I have simple idea to use standard deviation with recent price and prior to price.</p>
+
+<ul>
+  <li><strong>Is it true currunt standard deviation over mean of standard deviation during period?</strong></li>
+  <li><strong>It is true recent price below upper line of BB?</strong></li>
+  <li><strong>Is it true this ticker is rising?</strong>
+    <ul>
+      <li><strong>price of today over price of yesterday</strong></li>
+      <li><strong>price of yesterday over price of the day befor yesterday</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p>If upper the condition is satisfied, I think that selected ticker has high probabily of rising to be future.</p>
+
+<p>In my case I make the code for modeling and selection below.</p>
+
+<p>To download index using <strong>yahoo_fin</strong> API. This is very useful to download price, financial statements and others.</p>
+
+<blockquote>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">yahoo</span><span class="o">-</span><span class="n">fin</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># modelBB.py
+</span><span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">yahoo_fin.stock_info</span> <span class="k">as</span> <span class="n">yfs</span>
+
+<span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="n">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="n">classBB</span> <span class="kn">import</span> <span class="n">Stocks</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">stock_list</span><span class="p">,</span> <span class="n">day_init</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="nf">datetime</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">today</span><span class="o">=</span><span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()):</span>
+
+   <span class="c1"># Get list of Dow tickers
+</span>    <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sh">''</span>
+    <span class="k">if</span> <span class="n">stock_list</span> <span class="o">==</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_dow</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">dow</span><span class="sh">'</span>
+    <span class="k">elif</span> <span class="n">stock_list</span> <span class="o">==</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">sp500</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_sp500</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">stock_list</span> <span class="o">==</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">nasdaq</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_nasdaq</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">stock_list</span> <span class="o">==</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sh">'</span><span class="s">other</span><span class="sh">'</span>
+        <span class="n">dow_list</span> <span class="o">=</span> <span class="n">yfs</span><span class="p">.</span><span class="nf">tickers_other</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">dow_list</span><span class="p">)</span>
+
+    <span class="n">selected_ticker</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ticker</span> <span class="ow">in</span> <span class="nf">tqdm</span><span class="p">(</span><span class="n">dow_list</span><span class="p">):</span>
+
+        <span class="n">stock</span> <span class="o">=</span> <span class="nc">Stocks</span><span class="p">(</span><span class="n">ticker</span><span class="p">,</span> <span class="n">start_day</span><span class="p">,</span> <span class="n">today</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">stock</span><span class="p">.</span><span class="nf">with_moving_ave</span><span class="p">()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">str</span><span class="sh">'</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">].</span><span class="nf">mean</span><span class="p">()</span>
+        <span class="n">df_day_ago_ago</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">df_day_ago</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">df_recent</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="c1">#print(df_day_ago)
+</span>        <span class="c1">#print(df_recent)
+</span>        <span class="n">value_day_ago_ago</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_day_ago_ago</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">])</span>
+        <span class="n">value_day_ago</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_day_ago</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">])</span>
+        <span class="n">value_recent</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">Adj Close</span><span class="sh">'</span><span class="p">])</span>
+        <span class="n">upper_recent</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_upper</span><span class="sh">'</span><span class="p">])</span>
+        <span class="n">down_recent</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">bol_down</span><span class="sh">'</span><span class="p">])</span>
+        <span class="n">std_recent</span> <span class="o">=</span> <span class="nf">float</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="sh">'</span><span class="s">Std</span><span class="sh">'</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">std_recent</span> <span class="o">&lt;</span> <span class="n">mean</span> <span class="ow">and</span> <span class="n">value_recent</span> <span class="o">&gt;</span> <span class="n">value_day_ago</span> <span class="ow">and</span> <span class="n">value_day_ago</span> <span class="o">&gt;</span> <span class="n">value_day_ago_ago</span> <span class="ow">and</span> <span class="n">value_recent</span> <span class="o">&lt;</span>   <span class="n">upper_recent</span><span class="p">:</span>
+            <span class="n">selected_ticker</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">ticker</span><span class="p">)</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="sh">'</span><span class="s">/Users/hanseopark/Work/stock/data_ForTrading/{0}_TickerList</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">today</span><span class="p">.</span><span class="nf">date</span><span class="p">())</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nc">DataFrame</span><span class="p">(</span><span class="n">selected_ticker</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sh">'</span><span class="s">Ticker</span><span class="sh">'</span><span class="p">])</span>
+    <span class="c1">#df.columns = ['Ticker']
+</span>    <span class="n">df</span><span class="p">.</span><span class="nf">to_json</span><span class="p">(</span><span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">json</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="n">url</span><span class="o">+</span><span class="sh">'</span><span class="s">csv</span><span class="sh">'</span><span class="p">)</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">'</span><span class="s">__main__</span><span class="sh">'</span><span class="p">:</span>
+    <span class="n">s_list</span><span class="o">=</span> <span class="nf">input</span><span class="p">(</span><span class="sh">"</span><span class="s">Choice of stock</span><span class="sh">'</span><span class="s">s list (dow, sp500, nasdaq, other): </span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">td_1y</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="mi">52</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1">#start_day = datetime.datetime(2019,1,1)
+</span>    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+    <span class="n">start_day</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">td_1y</span>
+
+    <span class="nf">main</span><span class="p">(</span><span class="n">stock_list</span> <span class="o">=</span> <span class="n">s_list</span><span class="p">,</span><span class="n">day_init</span> <span class="o">=</span> <span class="n">start_day</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+</blockquote>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Let us know what is BB (Bollinger Band) and how to calculate with figure. And then we are going to find ticekr using this model.</p>
+
+<p>If you want to use this code, I’m very sorry that you should change code and make directory for data a little bit.</p>
+
+<p>I should appreciate and refer for many blog on google. Thanks a lot.</p>
+
+<p>If you satisfied this post you should check <a href="https://github.com/hanseopark/Stock/tree/master/BollingerBands">Github</a> and please <strong>Star</strong> :)</p>
+
+
+</div>
+
+
+<div class="related">
+  <h2>Related posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-2/">
+            The prediction of stock's price using Linear Regression for Machine Learning (2)
+            <small>04 Dec 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-11-28-ML-LinearRegression-1/">
+            The prediction of stock's price using Linear Regression for Machine Learning (1)
+            <small>28 Nov 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2021-07-10-pre-finance/">
+            Preprocessing with financial statements
+            <small>10 Jul 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+<div id="post-disqus" class="container">
+<div id="disqus_thread"></div>
+<script>
+    /**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://hanseopark-github-io.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script src='/public/js/script.js'></script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-HDN3NFF79P');
+</script>
+
+  </body>
+
+</html>
+
